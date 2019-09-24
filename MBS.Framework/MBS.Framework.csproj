@@ -7,7 +7,10 @@
     <OutputType>Library</OutputType>
     <RootNamespace>MBS.Framework</RootNamespace>
     <AssemblyName>MBS.Framework</AssemblyName>
-    <ReleaseVersion>1.0.*</ReleaseVersion>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>..\..\MichaelBecker.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
