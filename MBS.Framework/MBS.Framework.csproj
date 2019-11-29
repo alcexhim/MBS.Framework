@@ -47,6 +47,7 @@
     <Compile Include="Drawing\Dimension.cs" />
     <Compile Include="Drawing\Vector.cs" />
     <Compile Include="ArrayExtensions.cs" />
+    <Compile Include="Reflection.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
