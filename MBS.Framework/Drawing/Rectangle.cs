@@ -34,6 +34,13 @@ namespace MBS.Framework.Drawing
 			Width = size.Width;
 			Height = size.Height;
 		}
+		public Rectangle(Vector2D topLeft, Vector2D bottomRight)
+		{
+			X = topLeft.X;
+			Y = topLeft.Y;
+			Width = (bottomRight.X - topLeft.X);
+			Height = (bottomRight.Y - topLeft.Y);
+		}
 		public Rectangle(double x, double y, double width, double height)
 		{
 			X = x;
@@ -71,6 +78,33 @@ namespace MBS.Framework.Drawing
 			return rect;
 		}
 
+		/// <summary>
+		/// Normalize this instance.
+		/// </summary>
+		/// <returns>The normalize.</returns>
+		public Rectangle Normalize()
+		{
+			double x = this.X;
+			double y = this.Y;
+			double r = this.Right;
+			double b = this.Bottom;
+
+			if (x > r)
+			{
+				double t = x;
+				x = r;
+				r = t;
+			}
+			if (y > b)
+			{
+				double t = y;
+				y = b;
+				b = t;
+			}
+
+			return new Rectangle(x, y, r - x, b - y);
+		}
+
 
 		public bool Contains(double x, double y)
 		{
@@ -80,6 +114,11 @@ namespace MBS.Framework.Drawing
 		{
 			return Contains(point.X, point.Y);
 		}
+		public bool Contains(Rectangle rect)
+		{
+			return rect.X >= X && rect.Y >= Y && rect.Right <= Right && rect.Bottom <= Bottom;
+		}
+
 
 		public int CompareTo(Rectangle other)
 		{
@@ -128,6 +167,14 @@ namespace MBS.Framework.Drawing
 		public override bool Equals(object obj)
 		{
 			return base.Equals(obj);
+		}
+
+		public bool IntersectsWith(Rectangle rect)
+		{
+			return (rect.X < this.Right) &&
+			(this.X < (rect.Right)) &&
+			(rect.Y < this.Bottom) &&
+			(this.Y < rect.Bottom);
 		}
 	}
 }
