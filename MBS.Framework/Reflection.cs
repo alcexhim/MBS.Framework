@@ -116,5 +116,34 @@ namespace MBS.Framework
 			return mvarAvailableTypes;
 		}
 
+		public static FieldInfo GetField(Type type, string name, BindingFlags flags)
+		{
+			FieldInfo fi = type.GetField(name, flags);
+			if (fi == null)
+			{
+				if ((flags & BindingFlags.FlattenHierarchy) == BindingFlags.FlattenHierarchy)
+				{
+					Type typObj = typeof(object);
+
+					// this is the way FlattenHierarchy SHOULD work.. for Instance binding
+					while (type.BaseType != typObj)
+					{
+						fi = GetField(type.BaseType, name, flags);
+						if (fi != null) return fi; // we found it
+					}
+				}
+			}
+			return fi;
+		}
+		public static void SetField(object obj, string name, BindingFlags flags, object value)
+		{
+			if (obj == null) return;
+
+			FieldInfo fi = GetField(obj.GetType(), name, flags);
+			if (fi != null)
+			{
+				fi.SetValue(obj, value);
+			}
+		}
 	}
 }
