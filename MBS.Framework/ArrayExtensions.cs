@@ -45,7 +45,8 @@ namespace MBS.Framework
 			Array.Resize<T>(ref array, old.Length - length);
 
 			Array.Copy(old, 0, array, 0, start);
-			Array.Copy(old, start + length, array, start, array.Length - start - length);
+			if (array.Length - (start + length) > -1)
+				Array.Copy(old, start + length, array, start, array.Length - (start + length));
 		}
 	}
 }
