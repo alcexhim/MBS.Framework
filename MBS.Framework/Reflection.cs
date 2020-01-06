@@ -85,7 +85,11 @@ namespace MBS.Framework
 					catch (ReflectionTypeLoadException ex)
 					{
 						Console.Error.WriteLine("ReflectionTypeLoadException(" + ex.LoaderExceptions.Length.ToString() + "): " + asm.FullName);
-						Console.Error.WriteLine(ex.Message);
+						for (int i = 0; i < ex.LoaderExceptions.Length; i++)
+						{
+							Console.Error.WriteLine("\t" + ex.LoaderExceptions[i].Message);
+							Console.Error.WriteLine();
+						}
 
 						types1 = ex.Types;
 					}
