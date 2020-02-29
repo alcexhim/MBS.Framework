@@ -50,6 +50,20 @@
     <Compile Include="ArrayExtensions.cs" />
     <Compile Include="Reflection.cs" />
     <Compile Include="Security\Cryptography\ExtensionMethods.cs" />
+    <Compile Include="Logic\Expression.cs" />
+    <Compile Include="Logic\Expressions\BooleanExpression.cs" />
+    <Compile Include="Logic\Expressions\LiteralExpression.cs" />
+    <Compile Include="Logic\Expressions\ComplexExpression.cs" />
+    <Compile Include="Logic\Expressions\VariableExpression.cs" />
+    <Compile Include="Logic\ExpressionContext.cs" />
+    <Compile Include="Logic\Variable.cs" />
+    <Compile Include="Logic\Expressions\EmptyExpression.cs" />
+    <Compile Include="Logic\Expressions\ArithmeticExpression.cs" />
+    <Compile Include="Logic\VariableRequestedEvent.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Logic\" />
+    <Folder Include="Logic\Expressions\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
