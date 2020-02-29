@@ -58,6 +58,7 @@
     <Compile Include="Logic\ExpressionContext.cs" />
     <Compile Include="Logic\Variable.cs" />
     <Compile Include="Logic\Expressions\EmptyExpression.cs" />
+    <Compile Include="StringExtensions.cs" />
     <Compile Include="Logic\Expressions\ArithmeticExpression.cs" />
     <Compile Include="Logic\VariableRequestedEvent.cs" />
   </ItemGroup>
