@@ -26,6 +26,45 @@ namespace MBS.Framework
 {
 	public class Reflection
 	{
+		private static Dictionary<string, Type> TypesByName = new Dictionary<string, Type>();
+		public static Type FindType(string TypeName)
+		{
+			if (!TypesByName.ContainsKey(TypeName))
+			{
+				Assembly[] asms = GetAvailableAssemblies();
+				bool found = false;
+				for (int i = 0;  i < asms.Length;  i++)
+				{
+					Type[] types = null;
+					try
+					{
+						types = asms[i].GetTypes();
+					}
+					catch (ReflectionTypeLoadException ex)
+					{
+						Console.Error.WriteLine("ReflectionTypeLoadException(" + ex.LoaderExceptions.Length.ToString() + "): " + asms[i].FullName);
+						Console.Error.WriteLine(ex.Message);
+
+						types = ex.Types;
+					}
+					for (int j = 0;  j < types.Length; j++)
+					{
+						if (types[j] == null) continue;
+						if (types[j].FullName == TypeName)
+						{
+							TypesByName.Add(TypeName, types[j]);
+							found = true;
+							break;
+						}
+					}
+					if (found) break;
+				}
+				if (!found) return null;
+			}
+			return TypesByName[TypeName];
+		}
+
+
 		private static Assembly[] mvarAvailableAssemblies = null;
 		public static Assembly[] GetAvailableAssemblies()
 		{
