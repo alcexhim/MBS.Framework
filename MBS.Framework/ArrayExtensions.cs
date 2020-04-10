@@ -48,5 +48,11 @@ namespace MBS.Framework
 			if (array.Length - (start + length) > -1)
 				Array.Copy(old, start + length, array, start, array.Length - (start + length));
 		}
+		public static void Array_Append<T>(ref T[] destinationArray, T[] sourceArray)
+		{
+			int start = destinationArray.Length;
+			Array.Resize<T>(ref destinationArray, destinationArray.Length + sourceArray.Length);
+			Array.Copy(sourceArray, 0, destinationArray, start, sourceArray.Length);
+		}
 	}
 }
