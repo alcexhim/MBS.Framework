@@ -61,10 +61,17 @@
     <Compile Include="StringExtensions.cs" />
     <Compile Include="Logic\Expressions\ArithmeticExpression.cs" />
     <Compile Include="Logic\VariableRequestedEvent.cs" />
+    <Compile Include="Logic\Conditional\ConditionComparison.cs" />
+    <Compile Include="Logic\Conditional\ConditionCombination.cs" />
+    <Compile Include="Logic\Conditional\IConditionalStatement.cs" />
+    <Compile Include="Logic\Conditional\ConditionalStatementCollection.cs" />
+    <Compile Include="Logic\Conditional\ConditionGroup.cs" />
+    <Compile Include="Logic\Conditional\Condition.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
     <Folder Include="Logic\Expressions\" />
+    <Folder Include="Logic\Conditional\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
