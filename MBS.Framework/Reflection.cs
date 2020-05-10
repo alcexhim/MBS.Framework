@@ -29,6 +29,11 @@ namespace MBS.Framework
 		private static Dictionary<string, Type> TypesByName = new Dictionary<string, Type>();
 		public static Type FindType(string TypeName)
 		{
+			// first try using System.Type own GetType() method
+			Type type = Type.GetType(TypeName);
+			if (type != null) return type;
+
+			// if we don't get it from that we look a little deeper through reflection
 			if (!TypesByName.ContainsKey(TypeName))
 			{
 				Assembly[] asms = GetAvailableAssemblies();
