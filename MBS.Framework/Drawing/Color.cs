@@ -477,5 +477,38 @@ namespace MBS.Framework.Drawing
 		{
 			return !left.Equals(right);
 		}
+
+		// https://stackoverflow.com/questions/6615002/given-an-rgb-value-how-do-i-create-a-tint-or-shade
+		public Color Lighten(double factor)
+		{
+			// For tints (lighter), calculate (255 - previous value), multiply that by 1/4, 1/2, 3/4, etc. (the greater the factor, the lighter the tint),
+			// and add that to the previous value (assuming each.component is a 8-bit integer).
+			Color retval = Color.FromRGBADouble(this.R + ((1.0 - this.R) * factor), this.G + ((1.0 - this.G) * factor), this.B + ((1.0 - this.B) * factor), this.A);
+			return retval;
+		}
+		public Color Darken(double factor)
+		{
+			// For shades (darker), multiply each component by 1/4, 1/2, 3/4, etc., of its previous value. The smaller the factor, the darker the shade
+			Color retval = Color.FromRGBADouble(this.R * (1.0 - factor), this.G * (1.0 - factor), this.B * (1.0 - factor), this.A);
+			return retval;
+		}
+		/// <summary>
+		/// Creates an exact copy of this <see cref="Color" />, but with the specified alpha value.
+		/// </summary>
+		/// <returns>An exact copy of this <see cref="Color" />, but with the alpha value set to the given parameter.</returns>
+		/// <param name="value">The value to which to set the <see cref="A" /> property.</param>
+		public Color Alpha(double value)
+		{
+			return Color.FromRGBADouble(this.R, this.G, this.B, value);
+		}
+
+		public Color BlendLighter(double factor)
+		{
+			return Lighten(factor);
+		}
+		public Color BlendDarker(double factor)
+		{
+			return Darken(factor);
+		}
 	}
 }
