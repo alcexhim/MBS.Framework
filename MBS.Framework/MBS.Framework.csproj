@@ -67,6 +67,7 @@
     <Compile Include="Logic\Conditional\ConditionalStatementCollection.cs" />
     <Compile Include="Logic\Conditional\ConditionGroup.cs" />
     <Compile Include="Logic\Conditional\Condition.cs" />
+    <Compile Include="SeekDirection.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
