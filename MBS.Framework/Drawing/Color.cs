@@ -181,29 +181,13 @@ namespace MBS.Framework.Drawing
 			return ToHexadecimalHTML();
 		}
 
-		/*private double mvarRed;
-		public double Red { get { return mvarRed; } set { mvarRed = value; } }
-		public int RedInt32 { get { return (int)(mvarRed * 255); } set { mvarRed = (double)value / 255.0; } }
-
-		private double mvarGreen;
-		public double Green { get { return mvarGreen; } set { mvarGreen = value; } }
-		public int GreenInt32 { get { return (int)(mvarGreen * 255); } set { mvarGreen = (double)value / 255.0; } }
-
-		private double mvarBlue;
-		public double Blue { get { return mvarBlue; } set { mvarBlue = value; } }
-		public int BlueInt32 { get { return (int)(mvarBlue * 255); } set { mvarBlue = (double)value / 255.0; } }
-
-		private double mvarAlpha;
-		public double Alpha { get { return mvarAlpha; } set { mvarAlpha = value; } }
-		public int AlphaInt32 { get { return (int)(mvarAlpha * 255); } set { mvarAlpha = (double)value / 255.0; } }
-
 		public double Hue
 		{
 			get
 			{
-				int r = this.RedInt32;
-				int g = this.GreenInt32;
-				int b = this.BlueInt32;
+				int r = this.GetRedByte();
+				int g = this.GetGreenByte();
+				int b = this.GetBlueByte();
 
 				byte minRGB = (byte)Math.Min (r, Math.Min (g, b));
 				byte maxRGB = (byte)Math.Max (r, Math.Max (g, b));
@@ -243,8 +227,8 @@ namespace MBS.Framework.Drawing
 		{
 			get
 			{
-				int minRGB = Math.Min (this.RedInt32, Math.Min (this.GreenInt32, this.BlueInt32));
-				int maxRGB = Math.Max (this.RedInt32, Math.Max (this.GreenInt32, this.BlueInt32));
+				int minRGB = Math.Min (this.GetRedByte(), Math.Min (this.GetGreenByte(), this.GetBlueByte()));
+				int maxRGB = Math.Max (this.GetRedByte(), Math.Max (this.GetGreenByte(), this.GetBlueByte()));
 				if (maxRGB == minRGB) return 0.0;
 
 				int num = (int)(maxRGB + minRGB);
@@ -265,8 +249,8 @@ namespace MBS.Framework.Drawing
 		{
 			get
 			{
-				int minRGB = Math.Min (this.RedInt32, Math.Min (this.GreenInt32, this.BlueInt32));
-				int maxRGB = Math.Max (this.RedInt32, Math.Max (this.GreenInt32, this.BlueInt32));
+				int minRGB = Math.Min (this.GetRedByte(), Math.Min (this.GetGreenByte(), this.GetBlueByte()));
+				int maxRGB = Math.Max (this.GetRedByte(), Math.Max (this.GetGreenByte(), this.GetBlueByte()));
 				return (double)((double)(maxRGB + minRGB) / 510.0) / HSL_SCALE;
 			}
 			set { UpdateHSL (Hue, Saturation, value); }
@@ -282,22 +266,22 @@ namespace MBS.Framework.Drawing
 			if (l != 0)
 			{
 				if (s == 0)
-					mvarRed = mvarGreen = mvarBlue = l;
+					R = G = B = l;
 				else
 				{
 					double temp2 = GetTemp2(h, s, l);
 					double temp1 = 2.0 * l - temp2;
 
-					mvarRed = GetColorComponent(temp1, temp2, h + 1.0 / 3.0);
-					mvarGreen = GetColorComponent(temp1, temp2, h);
-					mvarBlue = GetColorComponent(temp1, temp2, h - 1.0 / 3.0);
+					R = GetColorComponent(temp1, temp2, h + 1.0 / 3.0);
+					G = GetColorComponent(temp1, temp2, h);
+					B = GetColorComponent(temp1, temp2, h - 1.0 / 3.0);
 				}
 			}
 			else
 			{
-				mvarRed = 0.0;
-				mvarGreen = 0.0;
-				mvarBlue = 0.0;
+				R = 0.0;
+				G = 0.0;
+				B = 0.0;
 			}
 		}
 
@@ -333,7 +317,7 @@ namespace MBS.Framework.Drawing
 					b = GetColorComponent(temp1, temp2, h - 1.0 / 3.0);
 				}
 			}
-			return Color.FromRGBA((int)(255 * r), (int)(255 * g), (int)(255 * b));
+			return Color.FromRGBAInt32((int)(255 * r), (int)(255 * g), (int)(255 * b));
 		}
 
 		private static double GetColorComponent(double temp1, double temp2, double temp3)
@@ -366,14 +350,12 @@ namespace MBS.Framework.Drawing
 			return temp2;
 		}
 
-		public static readonly Color Empty;
-
 		public override bool Equals(object obj)
 		{
 			if (obj is Color)
 			{
 				Color color = (Color)obj;
-				return ((mvarRed == color.mvarRed) && (mvarGreen == color.mvarGreen) && (mvarBlue == color.mvarBlue) && (mvarAlpha == color.mvarAlpha));
+				return ((R == color.R) && (G == color.G) && (B == color.B) && (A == color.A));
 			}
 			return false;
 		}
@@ -382,91 +364,11 @@ namespace MBS.Framework.Drawing
 			return base.GetHashCode();
 		}
 
-		public static Color FromRGBA(double red, double green, double blue, double alpha = 1.0)
-		{
-			Color color = new Color();
-			color.Red = red;
-			color.Green = green;
-			color.Blue = blue;
-			color.Alpha = alpha;
-			return color;
-		}
-		public static Color FromRGBA(float red, float green, float blue, float alpha = 1.0f)
-		{
-			Color color = new Color();
-			color.Red = red;
-			color.Green = green;
-			color.Blue = blue;
-			color.Alpha = alpha;
-			return color;
-		}
-		public static Color FromRGBA(byte red, byte green, byte blue, byte alpha = 255)
-		{
-			Color color = new Color();
-			color.Red = ((double)red / 255);
-			color.Green = ((double)green / 255);
-			color.Blue = ((double)blue / 255);
-			color.Alpha = ((double)alpha / 255);
-			return color;
-		}
-		public static Color FromRGBA(int red, int green, int blue, int alpha = 255)
-		{
-			Color color = new Color();
-			color.Red = ((double)red / 255);
-			color.Green = ((double)green / 255);
-			color.Blue = ((double)blue / 255);
-			color.Alpha = ((double)alpha / 255);
-			return color;
-		}
-		
 		public int CompareTo(Color other)
 		{
 			int thisVal = ToInt32();
 			int otherVal = other.ToInt32();
 			return thisVal.CompareTo(otherVal);
-		}
-
-		public static bool operator ==(Color left, Color right)
-		{
-			return left.Equals(right);
-		}
-		public static bool operator !=(Color left, Color right)
-		{
-			return !left.Equals(right);
-		}
-
-		public static Color FromString(string value)
-		{
-			if (value.StartsWith("#"))
-			{
-				// hex string
-				value = value.Substring(1);
-
-				string rr = value.Substring(0, 2);
-				string gg = value.Substring(2, 2);
-				string bb = value.Substring(4, 2);
-
-				byte r = Byte.Parse(rr, System.Globalization.NumberStyles.HexNumber);
-				byte g = Byte.Parse(gg, System.Globalization.NumberStyles.HexNumber);
-				byte b = Byte.Parse(bb, System.Globalization.NumberStyles.HexNumber);
-
-				return Color.FromRGBA(r, g, b);
-			}
-			return Color.Empty;
-		}
-		*/
-
-		public override bool Equals(object obj)
-		{
-			Color c = (Color)obj;
-			try
-			{
-				return (c.R == R && c.G == G && c.B == B && c.A == A);
-			}
-			catch (Exception ex)
-			{
-			}
-			return base.Equals(obj);
 		}
 
 		public static bool operator ==(Color left, Color right)
@@ -509,6 +411,11 @@ namespace MBS.Framework.Drawing
 		public Color BlendDarker(double factor)
 		{
 			return Darken(factor);
+		}
+
+		public Color ToBlackAndWhite()
+		{
+			return Color.FromHSL(this.Hue < 0.5 ? 0 : 1, this.Saturation, this.Luminosity);
 		}
 	}
 }
