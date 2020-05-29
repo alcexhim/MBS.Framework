@@ -68,11 +68,14 @@
     <Compile Include="Logic\Conditional\ConditionGroup.cs" />
     <Compile Include="Logic\Conditional\Condition.cs" />
     <Compile Include="SeekDirection.cs" />
+    <Compile Include="IO\File.cs" />
+    <Compile Include="IO\CaseSensitiveHandling.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
     <Folder Include="Logic\Expressions\" />
     <Folder Include="Logic\Conditional\" />
+    <Folder Include="IO\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
