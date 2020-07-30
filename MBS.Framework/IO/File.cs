@@ -25,6 +25,12 @@ namespace MBS.Framework.IO
 	{
 		public static string Find(string filename, CaseSensitiveHandling caseSensitiveHandling = CaseSensitiveHandling.System)
 		{
+			string folder = System.IO.Path.GetDirectoryName(filename);
+			if (String.IsNullOrEmpty(folder))
+			{
+				folder = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetEntryAssembly().Location);
+				filename = System.IO.Path.Combine(new string[] { folder, filename });
+			}
 			string fn1 = System.IO.Path.GetFileName(filename);
 
 			if ((Environment.OSVersion.Platform == PlatformID.Unix && caseSensitiveHandling == CaseSensitiveHandling.CaseInsensitive) ||
