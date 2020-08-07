@@ -70,6 +70,7 @@
     <Compile Include="SeekDirection.cs" />
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\CaseSensitiveHandling.cs" />
+    <Compile Include="MemsetExtension.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
