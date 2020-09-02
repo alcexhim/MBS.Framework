@@ -26,6 +26,21 @@ namespace MBS.Framework
 {
 	public class Reflection
 	{
+		public class ManifestResourceStream
+		{
+			public Assembly Assembly { get; private set; }
+			public string Name { get; private set; }
+			public System.IO.Stream Stream { get; private set; }
+
+			internal ManifestResourceStream(Assembly assem, string name, System.IO.Stream stream)
+			{
+				Assembly = assem;
+				Name = name;
+				Stream = stream;
+			}
+		}
+
+
 		private static Dictionary<string, Type> TypesByName = new Dictionary<string, Type>();
 		public static Type FindType(string TypeName)
 		{
@@ -192,6 +207,22 @@ namespace MBS.Framework
 			{
 				fi.SetValue(obj, value);
 			}
+		}
+
+		public static ManifestResourceStream[] GetAvailableManifestResourceStreams()
+		{
+			List<ManifestResourceStream> list = new List<ManifestResourceStream>();
+			Assembly[] asms = MBS.Framework.Reflection.GetAvailableAssemblies();
+			for (int i = 0; i < asms.Length; i++)
+			{
+				string[] resnames = asms[i].GetManifestResourceNames();
+				for (int j = 0; j < resnames.Length; j++)
+				{
+					System.IO.Stream stream = asms[i].GetManifestResourceStream(resnames[j]);
+					list.Add(new ManifestResourceStream(asms[i], resnames[j], stream));
+				}
+			}
+			return list.ToArray();
 		}
 	}
 }
