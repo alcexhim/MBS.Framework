@@ -48,6 +48,9 @@ namespace MBS.Framework.Logic.Conditional
 		/// <summary>
 		/// Negates the conditional comparison.
 		/// </summary>
-		Not = 16
+		Not = 16,
+		StartsWith = 32,
+		EndsWith = 64,
+		Contains = 128
 	}
 }
