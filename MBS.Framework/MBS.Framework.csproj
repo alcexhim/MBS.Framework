@@ -71,6 +71,9 @@
     <Compile Include="IO\File.cs" />
     <Compile Include="IO\CaseSensitiveHandling.cs" />
     <Compile Include="MemsetExtension.cs" />
+    <Compile Include="Drawing\Measurement.cs" />
+    <Compile Include="Drawing\MeasurementUnit.cs" />
+    <Compile Include="NumericStringSplitter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
