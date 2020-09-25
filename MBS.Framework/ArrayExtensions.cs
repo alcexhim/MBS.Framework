@@ -54,5 +54,18 @@ namespace MBS.Framework
 			Array.Resize<T>(ref destinationArray, destinationArray.Length + sourceArray.Length);
 			Array.Copy(sourceArray, 0, destinationArray, start, sourceArray.Length);
 		}
+
+		public static bool Matches<T>(this T[] array1, T[] array2)
+		{
+			if (array1.Length != array2.Length)
+				return false;
+
+			for (int i = 0; i < array1.Length; i++)
+			{
+				if (!array1[i].Equals(array2[i]))
+					return false;
+			}
+			return true;
+		}
 	}
 }
