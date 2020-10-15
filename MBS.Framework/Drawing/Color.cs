@@ -68,6 +68,10 @@ namespace MBS.Framework.Drawing
 			return color;
 		}
 
+		public static Color Parse(string value)
+		{
+			return Color.FromString(value);
+		}
 		public static Color FromString(string value)
 		{
 			/*
