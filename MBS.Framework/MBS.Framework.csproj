@@ -74,6 +74,8 @@
     <Compile Include="Drawing\Measurement.cs" />
     <Compile Include="Drawing\MeasurementUnit.cs" />
     <Compile Include="NumericStringSplitter.cs" />
+    <Compile Include="Plugin.cs" />
+    <Compile Include="Feature.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
