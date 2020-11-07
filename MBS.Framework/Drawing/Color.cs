@@ -27,6 +27,8 @@ namespace MBS.Framework.Drawing
 	{
 		public static readonly Color Empty;
 
+		private bool isNotEmpty;
+
 		private double mvarR;
 		public double R { get { return mvarR; } set { mvarR = value; } }
 
@@ -51,6 +53,7 @@ namespace MBS.Framework.Drawing
 			color.G = g;
 			color.B = b;
 			color.A = a;
+			color.isNotEmpty = true;
 			return color;
 		}
 
@@ -60,12 +63,7 @@ namespace MBS.Framework.Drawing
 		}
 		public static Color FromRGBAInt32(int r, int g, int b, int a = 255)
 		{
-			Color color = new Color();
-			color.R = ((double)r / 255);
-			color.G = ((double)g / 255);
-			color.B = ((double)b / 255);
-			color.A = ((double)a / 255);
-			return color;
+			return Color.FromRGBADouble(((double)r / 255), ((double)g / 255), ((double)b / 255), ((double)a / 255));
 		}
 
 		public static Color Parse(string value)
@@ -359,7 +357,7 @@ namespace MBS.Framework.Drawing
 			if (obj is Color)
 			{
 				Color color = (Color)obj;
-				return ((R == color.R) && (G == color.G) && (B == color.B) && (A == color.A));
+				return ((R == color.R) && (G == color.G) && (B == color.B) && (A == color.A) && (isNotEmpty == color.isNotEmpty));
 			}
 			return false;
 		}
