@@ -11,7 +11,6 @@
     <SchemaVersion>2.0</SchemaVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Production.snk</AssemblyOriginatorKeyFile>
-    <ReleaseVersion>4.0.2019.12</ReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -76,6 +75,17 @@
     <Compile Include="NumericStringSplitter.cs" />
     <Compile Include="Plugin.cs" />
     <Compile Include="Feature.cs" />
+    <Compile Include="Application.cs" />
+    <Compile Include="CommandLine.cs" />
+    <Compile Include="CommandLineOption.cs" />
+    <Compile Include="CommandLineOptionValueType.cs" />
+    <Compile Include="DefaultCommandLine.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="Command.cs" />
+    <Compile Include="CommandEvent.cs" />
+    <Compile Include="CommandItem.cs" />
+    <Compile Include="StockType.cs" />
+    <Compile Include="ContextChangedEvent.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
