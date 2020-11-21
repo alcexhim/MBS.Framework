@@ -86,6 +86,7 @@
     <Compile Include="CommandItem.cs" />
     <Compile Include="StockType.cs" />
     <Compile Include="ContextChangedEvent.cs" />
+    <Compile Include="Collections\Generic\ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
