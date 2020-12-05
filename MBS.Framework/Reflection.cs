@@ -42,7 +42,7 @@ namespace MBS.Framework
 
 
 		private static Dictionary<string, Type> TypesByName = new Dictionary<string, Type>();
-		public static Type FindType(string TypeName)
+		public static Type FindType(string TypeName, string[] usingNamespaces = null)
 		{
 			// first try using System.Type own GetType() method
 			Type type = Type.GetType(TypeName);
@@ -79,7 +79,19 @@ namespace MBS.Framework
 					}
 					if (found) break;
 				}
-				if (!found) return null;
+				if (!found)
+				{
+					if (usingNamespaces != null)
+					{
+						for (int i = 0; i < usingNamespaces.Length; i++)
+						{
+							Type t = FindType(String.Format("{0}.{1}", usingNamespaces[i], TypeName));
+							if (t != null)
+								return t;
+						}
+					}
+					return null;
+				}
 			}
 			return TypesByName[TypeName];
 		}
