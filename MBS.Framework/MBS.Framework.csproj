@@ -86,6 +86,11 @@
     <Compile Include="CommandItem.cs" />
     <Compile Include="StockType.cs" />
     <Compile Include="ContextChangedEvent.cs" />
+    <Compile Include="Scripting\Strings\ScriptableString.cs" />
+    <Compile Include="Scripting\Strings\StringComponent.cs" />
+    <Compile Include="Scripting\Strings\StringComponents\ConditionalStringComponent.cs" />
+    <Compile Include="Scripting\Strings\StringComponents\LiteralStringComponent.cs" />
+    <Compile Include="Scripting\ScriptEnvironment.cs" />
     <Compile Include="Collections\Generic\ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +98,8 @@
     <Folder Include="Logic\Expressions\" />
     <Folder Include="Logic\Conditional\" />
     <Folder Include="IO\" />
+    <Folder Include="Scripting\" />
+    <Folder Include="Scripting\Strings\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
