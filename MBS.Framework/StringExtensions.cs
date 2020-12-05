@@ -55,6 +55,13 @@ namespace MBS.Framework
 			return (T)Parse(value, typeof(T));
 		}
 
+		public static T TryParse<T>(this string value, T defaultValue = default(T))
+		{
+			if (TryParse(value, typeof(T), out object output))
+				return (T)output;
+			return defaultValue;
+		}
+
 
 		/// <summary>
 		/// Parses the given <paramref name="value" /> with the specified <paramref name="type" />'s public static Parse(<see cref="String" />) method. If no such method exists,
@@ -67,6 +74,7 @@ namespace MBS.Framework
 		{
 			return TryParse(value, type, value, out output);
 		}
+
 		/// <summary>
 		/// Parses the given <paramref name="value" /> with the specified <paramref name="type" />'s public static Parse(<see cref="String" />) method. If no such method exists,
 		/// returns <paramref name="defaultValue" />.
@@ -77,12 +85,14 @@ namespace MBS.Framework
 		/// <param name="defaultValue">Default value.</param>
 		public static bool TryParse(this string value, Type type, object defaultValue, out object output)
 		{
-			System.Reflection.MethodInfo miParse = type.GetMethod("TryParse", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, null, System.Reflection.CallingConventions.Any, new Type[] { typeof(string), type }, null);
+			System.Reflection.MethodInfo miParse = type.GetMethod("TryParse", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, null, new Type[] { typeof(string), type.MakeByRefType() }, null);
 			if (miParse != null)
 			{
 				// the given type implements a public static Parse(String) method, so use it
 				object retval = null;
-				bool ret = (bool)miParse.Invoke(null, new object[] { value, retval });
+				object[] parms = new object[] { value, retval };
+				bool ret = (bool)miParse.Invoke(null, parms);
+				retval = parms[1];
 				if (ret)
 				{
 					output = retval;
