@@ -78,5 +78,10 @@ namespace MBS.Framework.Drawing
 			mvarTop = top;
 			_IsNotEmpty = true;
 		}
+
+		public override string ToString()
+		{
+			return String.Format("(top: {0}, bottom: {1}, left: {2}, right: {3})", Top, Bottom, Left, Right);
+		}
 	}
 }
