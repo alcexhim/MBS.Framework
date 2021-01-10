@@ -33,6 +33,12 @@ namespace MBS.Framework
 		public string Title { get; set; } = String.Empty;
 		public int ExitCode { get; protected set; } = 0;
 
+		protected virtual InstallationStatus GetInstallationStatusInternal()
+		{
+			return InstallationStatus.Unknown;
+		}
+		public InstallationStatus InstallationStatus { get { return GetInstallationStatusInternal(); } }
+
 		public CommandLine CommandLine { get; protected set; } = null;
 
 		public Application()

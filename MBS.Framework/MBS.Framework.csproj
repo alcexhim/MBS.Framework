@@ -95,6 +95,7 @@
     <Compile Include="Scripting\ScriptEnvironment.cs" />
     <Compile Include="Collections\Generic\ExtensionMethods.cs" />
     <Compile Include="ISupportsExtraData.cs" />
+    <Compile Include="InstallationStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
