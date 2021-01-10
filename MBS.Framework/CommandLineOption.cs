@@ -77,6 +77,10 @@ namespace MBS.Framework
 					_byAbbreviation[item.Abbreviation] = item;
 			}
 
+			public CommandLineOption Add(string name, CommandLineOptionValueType type = CommandLineOptionValueType.None, object defaultValue = null, char abbreviation = '\0', string description = null)
+			{
+				return Add(name, abbreviation, defaultValue, type, description);
+			}
 			public CommandLineOption Add(string name, char abbreviation = '\0', object defaultValue = null, CommandLineOptionValueType type = CommandLineOptionValueType.None, string description = null)
 			{
 				CommandLineOption option = new CommandLineOption();
