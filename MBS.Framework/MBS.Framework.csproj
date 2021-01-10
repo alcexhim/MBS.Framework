@@ -11,6 +11,8 @@
     <SchemaVersion>2.0</SchemaVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Production.snk</AssemblyOriginatorKeyFile>
+    <ReleaseVersion>4.0.2021.01</ReleaseVersion>
+    <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -92,6 +94,7 @@
     <Compile Include="Scripting\Strings\StringComponents\LiteralStringComponent.cs" />
     <Compile Include="Scripting\ScriptEnvironment.cs" />
     <Compile Include="Collections\Generic\ExtensionMethods.cs" />
+    <Compile Include="ISupportsExtraData.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />

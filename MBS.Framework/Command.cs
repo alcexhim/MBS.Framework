@@ -1,8 +1,9 @@
 using System;
+using System.Collections.Generic;
 
 namespace MBS.Framework
 {
-	public class Command
+	public class Command : ISupportsExtraData
 	{
 		public class CommandCollection
 			: System.Collections.ObjectModel.Collection<Command>
@@ -98,6 +99,36 @@ namespace MBS.Framework
 		public override string ToString()
 		{
 			return String.Format("{0} [{1}]", ID, Title);
+		}
+
+		private Dictionary<string, object> _extraData = new Dictionary<string, object>();
+		public T GetExtraData<T>(string key, T defaultValue = default(T))
+		{
+			if (_extraData.ContainsKey(key))
+			{
+				if (_extraData[key] is T)
+				{
+					return (T)_extraData[key];
+				}
+			}
+			return defaultValue;
+		}
+
+		public void SetExtraData<T>(string key, T value)
+		{
+			_extraData[key] = value;
+		}
+
+		public object GetExtraData(string key, object defaultValue = null)
+		{
+			if (_extraData.ContainsKey(key))
+				return _extraData[key];
+			return defaultValue;
+		}
+
+		public void SetExtraData(string key, object value)
+		{
+			_extraData[key] = value;
 		}
 	}
 }
