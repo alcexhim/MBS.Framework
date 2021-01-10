@@ -95,13 +95,19 @@ namespace MBS.Framework
 		{
 		}
 
+		public bool Initialized { get; private set; } = false;
+
 		[System.Diagnostics.DebuggerNonUserCode()]
 		public void Initialize()
 		{
+			if (Initialized)
+				return;
+
 			if (ShortName == null)
 				throw new ArgumentException("must specify a ShortName for the application");
 
 			InitializeInternal();
+			Initialized = true;
 		}
 
 		protected virtual int StartInternal()
@@ -110,6 +116,11 @@ namespace MBS.Framework
 		}
 		public int Start()
 		{
+			if (Application.Instance == null)
+				Application.Instance = this;
+
+			Initialize();
+
 			int exitCode = StartInternal();
 			return exitCode;
 		}
