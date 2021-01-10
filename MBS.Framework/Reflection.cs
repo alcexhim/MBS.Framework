@@ -98,16 +98,28 @@ namespace MBS.Framework
 
 
 		private static Assembly[] mvarAvailableAssemblies = null;
-		public static Assembly[] GetAvailableAssemblies()
+		/// <summary>
+		/// Gets the available assemblies in the given search paths, or the current application directory if no search paths are specified.
+		/// </summary>
+		/// <returns>The available assemblies.</returns>
+		/// <param name="searchPaths">An array of <see cref="string" /> paths to search in.</param>
+		public static Assembly[] GetAvailableAssemblies(string[] searchPaths = null)
 		{
 			if (mvarAvailableAssemblies == null)
 			{
 				List<Assembly> list = new List<Assembly>();
 
 				List<string> asmdirs = new List<string>();
-				string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				string dir = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetCallingAssembly().Location);
 				asmdirs.Add(dir);
 				asmdirs.Add(dir + System.IO.Path.DirectorySeparatorChar.ToString() + "Plugins");
+				if (searchPaths != null)
+				{
+					for (int i = 0; i < searchPaths.Length; i++)
+					{
+						asmdirs.Add(searchPaths[i]);
+					}
+				}
 
 				foreach (string asmdir in asmdirs)
 				{
@@ -221,10 +233,15 @@ namespace MBS.Framework
 			}
 		}
 
-		public static ManifestResourceStream[] GetAvailableManifestResourceStreams()
+		/// <summary>
+		/// Gets the available manifest resource streams in the given search paths, or the current application directory if no search paths are specified.
+		/// </summary>
+		/// <returns>The available manifest resource streams.</returns>
+		/// <param name="searchPaths">An array of <see cref="string" /> paths to search in.</param>
+		public static ManifestResourceStream[] GetAvailableManifestResourceStreams(string[] searchPaths = null)
 		{
 			List<ManifestResourceStream> list = new List<ManifestResourceStream>();
-			Assembly[] asms = MBS.Framework.Reflection.GetAvailableAssemblies();
+			Assembly[] asms = MBS.Framework.Reflection.GetAvailableAssemblies(searchPaths);
 			for (int i = 0; i < asms.Length; i++)
 			{
 				string[] resnames = asms[i].GetManifestResourceNames();
