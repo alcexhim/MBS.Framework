@@ -253,5 +253,24 @@ namespace MBS.Framework
 			}
 			return list.ToArray();
 		}
+
+		/// <summary>
+		/// Creates and returns an instance of the type with the specified fully-qualified
+		/// (or partially-qualified if <paramref name="usingNamespaces"/> is specified) type name.
+		/// </summary>
+		/// <returns>An instance of the type with the specified fully-qualified type name.</returns>
+		/// <param name="typeName">The fully-qualified or partially-qualified type name to search.</param>
+		/// <param name="usingNamespaces">Array of <see cref="string" /> namespaces with which to prefix
+		/// <paramref name="typeName" /> during the search, if a type with the fully-qualified
+		/// <paramref name="typeName" /> is not found.</param>
+		/// <typeparam name="T">The type of instance to return.</typeparam>
+		public static T CreateType<T>(string typeName, string[] usingNamespaces = null)
+		{
+			Type t = FindType(typeName, usingNamespaces);
+			if (t == typeof(T) || t.IsSubclassOf(typeof(T)))
+				return (T)(t.Assembly.CreateInstance(t.FullName));
+
+			return default(T);
+		}
 	}
 }
