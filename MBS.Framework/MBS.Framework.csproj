@@ -96,6 +96,20 @@
     <Compile Include="Collections\Generic\ExtensionMethods.cs" />
     <Compile Include="ISupportsExtraData.cs" />
     <Compile Include="InstallationStatus.cs" />
+    <Compile Include="Setting.cs" />
+    <Compile Include="SettingsGroup.cs" />
+    <Compile Include="SettingsProfile.cs" />
+    <Compile Include="SettingsProvider.cs" />
+    <Compile Include="SettingsValue.cs" />
+    <Compile Include="Settings\CommandSetting.cs" />
+    <Compile Include="Settings\RangeSetting.cs" />
+    <Compile Include="Settings\GroupSetting.cs" />
+    <Compile Include="Settings\BooleanSetting.cs" />
+    <Compile Include="Settings\ChoiceSetting.cs" />
+    <Compile Include="Settings\TextSetting.cs" />
+    <Compile Include="Settings\CollectionSetting.cs" />
+    <Compile Include="Settings\FileSetting.cs" />
+    <Compile Include="CommandStylePreset.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
@@ -104,6 +118,7 @@
     <Folder Include="IO\" />
     <Folder Include="Scripting\" />
     <Folder Include="Scripting\Strings\" />
+    <Folder Include="Settings\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
