@@ -28,7 +28,24 @@ namespace MBS.Framework
 		public static Application Instance { get; set; } = null;
 
 		public Guid ID { get; set; } = Guid.Empty;
-		public string UniqueName { get; set; } = null;
+
+		private string _UniqueName = null;
+		public string UniqueName
+		{
+			get
+			{
+				if (_UniqueName == null)
+				{
+					return ShortName;
+				}
+				return _UniqueName;
+			}
+			set
+			{
+				_UniqueName = value;
+			}
+		}
+
 		public string ShortName { get; set; }
 		public string Title { get; set; } = String.Empty;
 		public int ExitCode { get; protected set; } = 0;
