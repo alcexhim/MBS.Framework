@@ -110,6 +110,7 @@
     <Compile Include="Settings\CollectionSetting.cs" />
     <Compile Include="Settings\FileSetting.cs" />
     <Compile Include="CommandStylePreset.cs" />
+    <Compile Include="Settings\CustomSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
