@@ -28,22 +28,36 @@ namespace MBS.Framework
 		public class ContextCollection
 			: System.Collections.ObjectModel.Collection<Context>
 		{
+			private Dictionary<Guid, Context> _ItemsByID = new Dictionary<Guid, Context>();
+
+			public bool Contains(Guid contextID)
+			{
+				return _ItemsByID.ContainsKey(contextID);
+			}
+
+			public Context this[Guid id]
+			{
+				get
+				{
+					if (_ItemsByID.ContainsKey(id))
+						return _ItemsByID[id];
+					return null;
+				}
+			}
+
 			protected override void ClearItems()
 			{
-				for (int i = 0; i < this.Count; i++)
-				{
-					Application.Instance.RemoveContext(this[i]);
-				}
 				base.ClearItems();
+				_ItemsByID.Clear();
 			}
 			protected override void InsertItem(int index, Context item)
 			{
 				base.InsertItem(index, item);
-				Application.Instance.AddContext(item);
+				_ItemsByID[item.ID] = item;
 			}
 			protected override void RemoveItem(int index)
 			{
-				Application.Instance.RemoveContext(this[index]);
+				_ItemsByID.Remove(this[index].ID);
 				base.RemoveItem(index);
 			}
 		}

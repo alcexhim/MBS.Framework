@@ -25,9 +25,68 @@ namespace MBS.Framework
 {
 	public class Application
 	{
+		public class ApplicationContextCollection
+			: Context.ContextCollection
+		{
+			protected override void ClearItems()
+			{
+				for (int i = 0; i < this.Count; i++)
+				{
+					Instance.RemoveContext(this[i]);
+				}
+				base.ClearItems();
+			}
+			protected override void InsertItem(int index, Context item)
+			{
+				base.InsertItem(index, item);
+				Instance.AddContext(item);
+			}
+			protected override void RemoveItem(int index)
+			{
+				Instance.RemoveContext(this[index]);
+				base.RemoveItem(index);
+			}
+		}
+
 		public static Application Instance { get; set; } = null;
 
+		protected virtual Command FindCommandInternal(string commandID)
+		{
+			return null;
+		}
+		public Command FindCommand(string commandID)
+		{
+			Command cmd = FindCommandInternal(commandID);
+			if (cmd != null) return cmd;
+
+			cmd = Commands[commandID];
+			if (cmd != null) return cmd;
+			return null;
+		}
+
+		protected virtual Context FindContextInternal(Guid contextID)
+		{
+			return null;
+		}
+		public Context FindContext(Guid contextID)
+		{
+			Context ctx = FindContextInternal(contextID);
+			if (ctx != null) return ctx;
+
+			ctx = Contexts[contextID];
+			if (ctx != null) return ctx;
+			return null;
+		}
+
 		public Guid ID { get; set; } = Guid.Empty;
+
+		protected virtual void EnableDisableCommandInternal(Command command, bool enable)
+		{
+		}
+		internal void _EnableDisableCommand(Command command, bool enable)
+		{
+			EnableDisableCommandInternal(command, enable);
+		}
 
 		private string _UniqueName = null;
 		public string UniqueName
@@ -86,6 +145,7 @@ namespace MBS.Framework
 			}
 			return false;
 		}
+
 		public void ExecuteCommand(string id, KeyValuePair<string, object>[] namedParameters = null)
 		{
 			Command cmd = Commands[id];
@@ -154,7 +214,7 @@ namespace MBS.Framework
 		/// Gets a collection of <see cref="Context" /> objects representing system, application, user, and custom contexts for settings and other items.
 		/// </summary>
 		/// <value>A collection of <see cref="Context" /> objects representing cpublic  for settings and other items.</value>
-		public Context.ContextCollection Contexts { get; } = new Context.ContextCollection();
+		public ApplicationContextCollection Contexts { get; } = new ApplicationContextCollection();
 
 		public ContextChangedEventHandler ContextAdded;
 		protected virtual void OnContextAdded(ContextChangedEventArgs e)
@@ -171,7 +231,7 @@ namespace MBS.Framework
 		/// <summary>
 		/// Handles updating the menus, toolbars, keyboard shortcuts, and other UI elements associated with the application <see cref="Context" />.
 		/// </summary>
-		internal void AddContext(Context ctx)
+		private void AddContext(Context ctx)
 		{
 			OnContextAdded(new ContextChangedEventArgs(ctx));
 		}
@@ -179,7 +239,7 @@ namespace MBS.Framework
 		/// <summary>
 		/// Handles updating the menus, toolbars, keyboard shortcuts, and other UI elements associated with the application <see cref="Context" />.
 		/// </summary>
-		internal void RemoveContext(Context ctx)
+		private void RemoveContext(Context ctx)
 		{
 			OnContextRemoved(new ContextChangedEventArgs(ctx));
 		}
