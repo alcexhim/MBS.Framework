@@ -79,7 +79,8 @@ namespace MBS.Framework
 		/// that reference it.
 		/// </summary>
 		/// <value><c>true</c> if visible; otherwise, <c>false</c>.</value>
-		public bool Enabled { get; set; } = true;
+		private bool _Enabled = true;
+		public bool Enabled { get { return _Enabled; } set { _Enabled = value; Application.Instance._EnableDisableCommand(this, value); } }
 
 		/// <summary>
 		/// Determines whether this <see cref="Command" /> is visible in all <see cref="CommandBar" />s and <see cref="MenuBar" />s
