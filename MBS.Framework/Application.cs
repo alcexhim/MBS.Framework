@@ -59,6 +59,12 @@ namespace MBS.Framework
 			Command cmd = FindCommandInternal(commandID);
 			if (cmd != null) return cmd;
 
+			foreach (Context ctx in Contexts)
+			{
+				cmd = ctx.Commands[commandID];
+				if (cmd != null) return cmd;
+			}
+
 			cmd = Commands[commandID];
 			if (cmd != null) return cmd;
 			return null;
