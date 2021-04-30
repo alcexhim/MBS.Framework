@@ -56,7 +56,10 @@ namespace MBS.Framework
 		}
 		public Command FindCommand(string commandID)
 		{
-			Command cmd = FindCommandInternal(commandID);
+			Command cmd = Commands[commandID];
+			if (cmd != null) return cmd;
+
+			cmd = FindCommandInternal(commandID);
 			if (cmd != null) return cmd;
 
 			foreach (Context ctx in Contexts)
@@ -65,8 +68,6 @@ namespace MBS.Framework
 				if (cmd != null) return cmd;
 			}
 
-			cmd = Commands[commandID];
-			if (cmd != null) return cmd;
 			return null;
 		}
 
