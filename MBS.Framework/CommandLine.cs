@@ -29,7 +29,7 @@ namespace MBS.Framework
 		/// Gets the original <see cref="String" /> array of arguments.
 		/// </summary>
 		/// <value>The arguments.</value>
-		public string[] Arguments { get; private set; }
+		public string[] Arguments { get; protected set; }
 
 		/// <summary>
 		/// Gets the list of file names passed on the command line.
@@ -45,6 +45,11 @@ namespace MBS.Framework
 		protected internal CommandLine(string[] arguments)
 		{
 			this.Arguments = arguments;
+		}
+
+		public override string ToString()
+		{
+			return String.Join(" ", Arguments);
 		}
 	}
 }
