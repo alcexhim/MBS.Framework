@@ -24,6 +24,28 @@ namespace MBS.Framework
 			}
 		}
 	}
+	public class ActionCommandItem : CommandItem
+	{
+		public string ID { get; }
+		public string Title { get; }
+
+		public event EventHandler Executed;
+
+		public void Execute()
+		{
+			Executed?.Invoke(this, EventArgs.Empty);
+		}
+
+		public ActionCommandItem(string id, string title, EventHandler execute = null)
+		{
+			ID = id;
+			Title = title;
+			if (execute != null)
+			{
+				Executed += execute;
+			}
+		}
+	}
 	public class CommandReferenceCommandItem : CommandItem
 	{
 		private string mvarCommandID = String.Empty;
