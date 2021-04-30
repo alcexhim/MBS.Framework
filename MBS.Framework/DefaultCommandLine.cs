@@ -23,5 +23,13 @@ namespace MBS.Framework
 {
 	public class DefaultCommandLine : CommandLine
 	{
+		public DefaultCommandLine()
+		{
+			string[] ary1 = Environment.GetCommandLineArgs();
+			string[] ary2 = new string[ary1.Length - 1];
+
+			Array.Copy(ary1, 1, ary2, 0, ary1.Length - 1);
+			Arguments = ary2;
+		}
 	}
 }
