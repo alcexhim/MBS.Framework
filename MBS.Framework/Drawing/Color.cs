@@ -23,7 +23,7 @@ using System.Text;
 
 namespace MBS.Framework.Drawing
 {
-	public struct Color
+	public struct Color : ICloneable
 	{
 		public static readonly Color Empty;
 
@@ -64,6 +64,14 @@ namespace MBS.Framework.Drawing
 		public static Color FromRGBAInt32(int r, int g, int b, int a = 255)
 		{
 			return Color.FromRGBADouble(((double)r / 255), ((double)g / 255), ((double)b / 255), ((double)a / 255));
+		}
+
+		public static Color FromCMYKDouble(double c, double m, double y, double k, double a = 255)
+		{
+			double r = (1 - c) * (1 - k);
+			double g = (1 - m) * (1 - k);
+			double b = (1 - y) * (1 - k);
+			return Color.FromRGBADouble(r, g, b, a);
 		}
 
 		public static Color Parse(string value)
@@ -131,17 +139,33 @@ namespace MBS.Framework.Drawing
 		{
 			return (byte)(mvarR * 255);
 		}
+		public double GetRedFraction()
+		{
+			return R;
+		}
 		public byte GetGreenByte()
 		{
 			return (byte)(mvarG * 255);
+		}
+		public double GetGreenFraction()
+		{
+			return G;
 		}
 		public byte GetBlueByte()
 		{
 			return (byte)(mvarB * 255);
 		}
+		public double GetBlueFraction()
+		{
+			return B;
+		}
 		public byte GetAlphaByte()
 		{
 			return (byte)(mvarA * 255);
+		}
+		public double GetAlphaFraction()
+		{
+			return A;
 		}
 
 		public string ToHexadecimalVB()
@@ -183,123 +207,149 @@ namespace MBS.Framework.Drawing
 			return ToHexadecimalHTML();
 		}
 
+		public double GetHueFraction()
+		{
+			return Hue;
+		}
+		public void SetHueFraction(double value)
+		{
+			Hue = value;
+		}
+
+		public double GetHueScaled(double scale = 240.0)
+		{
+			return GetHueFraction() * scale;
+		}
+		public void SetHueScaled(double value, double scale = 240.0)
+		{
+			SetHueFraction(value / scale);
+		}
+
 		public double Hue
 		{
 			get
 			{
-				int r = this.GetRedByte();
-				int g = this.GetGreenByte();
-				int b = this.GetBlueByte();
+				GetMinMax(out double min, out double max);
+				if (max == min) return 0.0;
 
-				byte minRGB = (byte)Math.Min (r, Math.Min (g, b));
-				byte maxRGB = (byte)Math.Max (r, Math.Max (g, b));
-				if (maxRGB == minRGB) return 0.0;
-
-				float num = (float)(maxRGB - minRGB);
-				float redFraction = (float)((int)maxRGB - r) / num;
-				float greenFraction = (float)((int)maxRGB - g) / num;
-				float blueFraction = (float)((int)maxRGB - b) / num;
-				float hue = 0f;
-				if (r == (int)maxRGB)
+				double hue = 0.0;
+				if (R == max)
 				{
-					hue = 60f * (6f + blueFraction - greenFraction);
+					hue = (G - B) / (max - min);
 				}
-				if (g == (int)maxRGB)
+				else if (G == max)
 				{
-					hue = 60f * (2f + redFraction - blueFraction);
+					hue = 2.0 + (B - R) / (max - min);
 				}
-				if (b == (int)maxRGB)
+				else if (B == max)
 				{
-					hue = 60f * (4f + greenFraction - redFraction);
+					hue = 4.0 + (R - G) / (max - min);
 				}
-				if (hue > 360f)
-				{
-					hue -= 360f;
-				}
-				return (double)(hue / HSL_SCALE);
+				return ((hue * 60) / 360);
 			}
 			set { UpdateHSL (value, Saturation, Luminosity); }
 		}
-		public int HueInt32
-		{
-			get { return (int)(Hue * HSL_SCALE); }
-			set { Hue = CheckRange ((double)value / HSL_SCALE); }
-		}
+
 		public double Saturation
 		{
 			get
 			{
-				int minRGB = Math.Min (this.GetRedByte(), Math.Min (this.GetGreenByte(), this.GetBlueByte()));
-				int maxRGB = Math.Max (this.GetRedByte(), Math.Max (this.GetGreenByte(), this.GetBlueByte()));
-				if (maxRGB == minRGB) return 0.0;
+				GetMinMax(out double min, out double max);
+				if (min == max) return 0.0;
 
-				int num = (int)(maxRGB + minRGB);
-				if (num > 255)
+				if (Luminosity <= 0.5)
 				{
-					num = 510 - num;
+					return (max - min) / (max + min);
 				}
-				return (double)((double)(maxRGB - minRGB) / (double)num) / HSL_SCALE;
+				return (max - min) / (2.0 - max - min);
 			}
 			set { UpdateHSL (Hue, value, Luminosity); }
 		}
-		public int SaturationInt32
-		{
-			get { return (int)(Saturation * HSL_SCALE); }
-			set { Saturation = CheckRange ((double)value / HSL_SCALE); }
-		}
+
 		public double Luminosity
 		{
 			get
 			{
-				int minRGB = Math.Min (this.GetRedByte(), Math.Min (this.GetGreenByte(), this.GetBlueByte()));
-				int maxRGB = Math.Max (this.GetRedByte(), Math.Max (this.GetGreenByte(), this.GetBlueByte()));
-				return (double)((double)(maxRGB + minRGB) / 510.0) / HSL_SCALE;
+				GetMinMax(out double min, out double max);
+				return (min + max) / 2;
 			}
 			set { UpdateHSL (Hue, Saturation, value); }
 		}
-		public int LuminosityInt32
+		public double GetLuminosityFraction()
 		{
-			get { return (int)(Luminosity * HSL_SCALE); }
-			set { Luminosity = CheckRange ((double)value / HSL_SCALE); }
+			return Luminosity;
+		}
+
+		private void GetMinMax(out double min, out double max)
+		{
+			min = Math.Min(GetRedFraction(), Math.Min(GetGreenFraction(), GetBlueFraction()));
+			max = Math.Max(GetRedFraction(), Math.Max(GetGreenFraction(), GetBlueFraction()));
+		}
+		private void GetMinMax(out byte min, out byte max)
+		{
+			min = Math.Min(GetRedByte(), Math.Min(GetGreenByte(), GetBlueByte()));
+			max = Math.Max(GetRedByte(), Math.Max(GetGreenByte(), GetBlueByte()));
+		}
+
+		public static Color FromHSL(int h, int s, int l, double scale = 240.0)
+		{
+			return FromHSL ((double)h / scale, (double)s / scale, (double)l / scale);
 		}
 
 		private void UpdateHSL(double h, double s, double l)
 		{
-			if (l != 0)
+			if (s == 0.0)
 			{
-				if (s == 0)
-					R = G = B = l;
-				else
-				{
-					double temp2 = GetTemp2(h, s, l);
-					double temp1 = 2.0 * l - temp2;
+				R = l;
+				G = l;
+				B = l;
+				return;
+			}
 
-					R = GetColorComponent(temp1, temp2, h + 1.0 / 3.0);
-					G = GetColorComponent(temp1, temp2, h);
-					B = GetColorComponent(temp1, temp2, h - 1.0 / 3.0);
-				}
+			double temp1 = 0.0;
+			if (l < 0.5)
+			{
+				temp1 = l * (1.0 + s);
+			}
+			else if (l >= 0.5)
+			{
+				temp1 = (l + s) - (l * s);
+			}
+			double temp2 = 2 * l - temp1;
+
+			double tempR = h + 0.333;
+			double tempG = h;
+			double tempB = h - 0.333;
+
+			R = GetHSLTempValue(tempR, temp1, temp2);
+			G = GetHSLTempValue(tempG, temp1, temp2);
+			B = GetHSLTempValue(tempB, temp1, temp2);
+		}
+
+		private static double GetHSLTempValue(double tempX, double temp1, double temp2)
+		{
+			if (6 * tempX < 1)
+			{
+				return temp2 + (temp1 - temp2) * 6 * tempX;
 			}
 			else
 			{
-				R = 0.0;
-				G = 0.0;
-				B = 0.0;
+				if (2 * tempX < 1)
+				{
+					return temp1;
+				}
+				else
+				{
+					if (3 * tempX < 2)
+					{
+						return temp2 + (temp1 - temp2) * (0.666 - tempX) * 6;
+					}
+					else
+					{
+						return temp2;
+					}
+				}
 			}
-		}
-
-		private const double HSL_SCALE = 240.0;
-		private double CheckRange(double value)
-		{
-			if (value < 0.0)
-				value = 0.0;
-			else if (value > 1.0)
-				value = 1.0;
-			return value;
-		}
-
-		public static Color FromHSL(int h, int s, int l)
-		{
-			return FromHSL ((double)h / HSL_SCALE, (double)s / HSL_SCALE, (double)l / HSL_SCALE);
 		}
 
 		public static Color FromHSL(double h, double s, double l)
@@ -418,6 +468,11 @@ namespace MBS.Framework.Drawing
 		public Color ToBlackAndWhite()
 		{
 			return Color.FromHSL(this.Hue < 0.5 ? 0 : 1, this.Saturation, this.Luminosity);
+		}
+
+		public object Clone()
+		{
+			return Color.FromRGBADouble(R, G, B, A);
 		}
 	}
 }
