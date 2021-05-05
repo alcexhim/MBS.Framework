@@ -69,6 +69,15 @@ namespace MBS.Framework
 			{
 				return _itemsByID.ContainsKey(id);
 			}
+			public SettingsGroup this[Guid id]
+			{
+				get
+				{
+					if (_itemsByID.ContainsKey(id))
+						return _itemsByID[id];
+					return null;
+				}
+			}
 		}
 
 		public SettingsGroup()
