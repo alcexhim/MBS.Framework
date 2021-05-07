@@ -28,7 +28,7 @@ namespace MBS.Framework
 		Cut,
 		Delete,
 		DialogAuthentication,		// not for buttons
-		DialogInfo,					
+		DialogInfo,
 		DialogWarning,
 		DialogError,
 		DialogQuestion,
@@ -119,4 +119,3 @@ namespace MBS.Framework
 		ZoomOut
 	}
 }
-

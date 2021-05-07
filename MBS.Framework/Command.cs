@@ -68,7 +68,7 @@ namespace MBS.Framework
 		/// The child <see cref="CommandItem"/>s that are contained within this <see cref="Command"/>.
 		/// </summary>
 		public CommandItem.CommandItemCollection Items { get; } = new CommandItem.CommandItemCollection();
-		
+
 		/// <summary>
 		/// The event that is fired when the command is executed.
 		/// </summary>
@@ -133,4 +133,3 @@ namespace MBS.Framework
 		}
 	}
 }
-

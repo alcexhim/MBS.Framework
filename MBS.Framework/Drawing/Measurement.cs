@@ -27,43 +27,40 @@ namespace MBS.Framework.Drawing
 	/// Represents a tuple of a numeric value and a unit of measure.
 	/// </summary>
 	public struct Measurement
-    {
-        public static readonly Measurement Empty;
+	{
+		public static readonly Measurement Empty;
 
-        public Measurement(double value, MeasurementUnit unit)
-        {
-            mvarUnit = unit;
-            mvarValue = value;
-            mvarIsFull = true;
-        }
+		public Measurement(double value, MeasurementUnit unit)
+		{
+			Unit = unit;
+			Value = value;
+			mvarIsFull = true;
+		}
 
-        private double mvarValue;
-        public double Value { get { return mvarValue; } set { mvarValue = value; } }
+		public double Value { get; set; }
+		public MeasurementUnit Unit { get; set; }
 
-        private MeasurementUnit mvarUnit;
-        public MeasurementUnit Unit { get { return mvarUnit; } set { mvarUnit = value; } }
-
-        private bool mvarIsFull;
-        public bool IsEmpty { get { return !mvarIsFull; } }
+		private bool mvarIsFull;
+		public bool IsEmpty { get { return !mvarIsFull; } }
 
 		public static Measurement Parse(string value)
 		{
-            DoubleStringSplitterResult dssr = NumericStringSplitter.SplitDoubleStringParts(value);
-            double val = dssr.DoublePart;
+			DoubleStringSplitterResult dssr = NumericStringSplitter.SplitDoubleStringParts(value);
+			double val = dssr.DoublePart;
 			MeasurementUnit unit;
-            switch (dssr.StringPart.ToLower())
-            {
-                case "cm": unit = MeasurementUnit.Cm; break;
-                case "em": unit = MeasurementUnit.Em; break;
-                case "ex": unit = MeasurementUnit.Ex; break;
-                case "in": unit = MeasurementUnit.Inch; break;
-                case "mm": unit = MeasurementUnit.Mm; break;
-                case "%": unit = MeasurementUnit.Percentage; break;
-                case "pc": unit = MeasurementUnit.Pica; break;
-                case "px": unit = MeasurementUnit.Pixel; break;
-                case "pt": unit = MeasurementUnit.Point; break;
-                default: unit = MeasurementUnit.Pixel; break;
-            }
+			switch (dssr.StringPart.ToLower())
+			{
+				case "cm": unit = MeasurementUnit.Cm; break;
+				case "em": unit = MeasurementUnit.Em; break;
+				case "ex": unit = MeasurementUnit.Ex; break;
+				case "in": unit = MeasurementUnit.Inch; break;
+				case "mm": unit = MeasurementUnit.Mm; break;
+				case "%": unit = MeasurementUnit.Percentage; break;
+				case "pc": unit = MeasurementUnit.Pica; break;
+				case "px": unit = MeasurementUnit.Pixel; break;
+				case "pt": unit = MeasurementUnit.Point; break;
+				default: unit = MeasurementUnit.Pixel; break;
+			}
 			return new Measurement(val, unit);
 		}
 
@@ -124,9 +121,9 @@ namespace MBS.Framework.Drawing
 					break;
 				}
 				case MeasurementUnit.Em:
-				break;
+					break;
 				case MeasurementUnit.Ex:
-				break;
+					break;
 				case MeasurementUnit.Inch:
 				{
 					switch (unit2)

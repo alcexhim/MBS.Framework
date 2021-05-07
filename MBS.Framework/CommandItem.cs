@@ -50,7 +50,7 @@ namespace MBS.Framework
 	{
 		private string mvarCommandID = String.Empty;
 		public string CommandID { get { return mvarCommandID; } set { mvarCommandID = value; } }
-		
+
 		public CommandReferenceCommandItem(string commandID)
 		{
 			mvarCommandID = commandID;
@@ -74,4 +74,3 @@ namespace MBS.Framework
 		public CommandItemCollection Items { get; } = new CommandItemCollection();
 	}
 }
-
