@@ -1,4 +1,4 @@
-﻿//
+//
 //  ConditionGroup.cs - a group of IConditionalStatements joined by a ConditionCombination
 //
 //  Author:

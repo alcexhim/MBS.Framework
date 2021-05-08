@@ -1,4 +1,4 @@
-﻿//
+//
 //  CustomSetting.cs - provides a way to display custom controls in the settings dialog
 //
 //  Author:

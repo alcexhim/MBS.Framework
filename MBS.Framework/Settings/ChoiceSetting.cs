@@ -1,4 +1,4 @@
-﻿//
+//
 //  ChoiceSetting.cs
 //
 //  Author:

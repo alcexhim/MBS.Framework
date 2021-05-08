@@ -1,4 +1,4 @@
-﻿//
+//
 //  ArrayExtensions.cs
 //
 //  Author:

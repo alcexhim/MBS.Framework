@@ -1,4 +1,4 @@
-﻿//
+//
 //  CommandLineOption.cs
 //
 //  Author:

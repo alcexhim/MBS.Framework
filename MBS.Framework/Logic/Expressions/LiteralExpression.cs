@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace MBS.Framework.Logic.Expressions
 {
 	public class LiteralExpression<T> : Expression

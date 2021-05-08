@@ -1,4 +1,4 @@
-﻿//
+//
 //  InstallationStatus.cs
 //
 //  Author:

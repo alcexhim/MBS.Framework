@@ -1,4 +1,4 @@
-﻿//
+//
 //  SeekDirection.cs
 //
 //  Author:

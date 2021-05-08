@@ -1,4 +1,4 @@
-﻿//
+//
 //  ConditionalStatementCollection.cs - a collection of IConditionalStatements
 //
 //  Author:

@@ -1,4 +1,4 @@
-﻿//
+//
 //  CommandStylePresets.cs
 //
 //  Author:

@@ -1,4 +1,4 @@
-﻿//
+//
 //  ConditionComparison.cs - indicates the type of comparison to use with a conditional statement
 //
 //  Author:

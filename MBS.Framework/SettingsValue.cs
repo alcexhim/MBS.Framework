@@ -1,4 +1,4 @@
-﻿//
+//
 //  SettingValue.cs
 //
 //  Author:

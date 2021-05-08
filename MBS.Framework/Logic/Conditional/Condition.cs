@@ -1,4 +1,4 @@
-﻿//
+//
 //  Condition.cs - represents a conditional statement which defines a comparison of a named property with a constant value
 //
 //  Author:

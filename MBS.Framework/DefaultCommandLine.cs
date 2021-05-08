@@ -1,4 +1,4 @@
-﻿//
+//
 //  DefaultCommandLine.cs
 //
 //  Author:

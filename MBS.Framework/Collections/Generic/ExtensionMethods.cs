@@ -1,4 +1,4 @@
-﻿//
+//
 //  ExtensionMethods.cs - implements generic-typed extension methods for System.Collections classes
 //
 //  Author:

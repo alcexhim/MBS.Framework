@@ -1,4 +1,4 @@
-﻿//
+//
 //  CaseSensitiveHandling.cs
 //
 //  Author:

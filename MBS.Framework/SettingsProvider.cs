@@ -1,4 +1,4 @@
-﻿//
+//
 //  OptionProvider.cs
 //
 //  Author:

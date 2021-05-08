@@ -1,4 +1,4 @@
-﻿//
+//
 //  ISupportsExtraData.cs - interface for providing GetExtraData / SetExtraData methods
 //
 //  Author:

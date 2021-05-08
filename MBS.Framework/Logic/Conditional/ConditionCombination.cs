@@ -1,4 +1,4 @@
-﻿//
+//
 //  ConditionCombination.cs - indicates the type of combination applied to a series of conditional statements
 //
 //  Author:

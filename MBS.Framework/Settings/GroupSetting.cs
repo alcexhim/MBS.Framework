@@ -1,4 +1,4 @@
-﻿//
+//
 //  GroupSetting.cs
 //
 //  Author:

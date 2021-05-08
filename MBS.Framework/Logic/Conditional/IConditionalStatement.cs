@@ -1,4 +1,4 @@
-﻿//
+//
 //  IConditionalStatement.cs - interface defining the minimum functionality required to implement a conditional statement
 //
 //  Author:

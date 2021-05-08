@@ -1,4 +1,4 @@
-﻿//
+//
 //  CollectionSetting.cs
 //
 //  Author:

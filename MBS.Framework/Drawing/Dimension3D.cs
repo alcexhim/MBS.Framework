@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace MBS.Framework.Drawing
 {
 	public struct Dimension3D : ICloneable

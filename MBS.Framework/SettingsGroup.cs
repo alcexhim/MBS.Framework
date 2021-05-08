@@ -1,4 +1,4 @@
-﻿//
+//
 //  OptionPanel.cs
 //
 //  Author:

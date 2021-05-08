@@ -1,4 +1,4 @@
-﻿//
+//
 //  FileSetting.cs
 //
 //  Author:
