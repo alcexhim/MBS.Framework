@@ -43,6 +43,7 @@ namespace MBS.Framework
 		Find,
 		FindAndReplace,
 		Floppy,
+		Folder,
 		Fullscreen,
 		GotoBottom,
 		GotoFirst,
