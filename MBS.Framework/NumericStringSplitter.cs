@@ -51,13 +51,23 @@ namespace MBS.Framework
 			mvarStringPart = stringPart;
 		}
 	}
+	public struct DecimalStringSplitterResult
+	{
+		private decimal mvarDecimalPart;
+		public decimal DecimalPart { get { return mvarDecimalPart; } }
+
+		private string mvarStringPart;
+		public string StringPart { get { return mvarStringPart; } }
+
+		public DecimalStringSplitterResult(decimal doublePart, string stringPart)
+		{
+			mvarDecimalPart = doublePart;
+			mvarStringPart = stringPart;
+		}
+	}
 	public static class NumericStringSplitter
 	{
-		public static IntStringSplitterResult SplitIntStringParts(this string value)
-		{
-			return SplitIntStringParts(value, 0);
-		}
-		public static IntStringSplitterResult SplitIntStringParts(this string value, int start)
+		public static IntStringSplitterResult SplitIntStringParts(this string value, int start = 0)
 		{
 			string intval = String.Empty;
 			string strval = String.Empty;
@@ -79,11 +89,7 @@ namespace MBS.Framework
 			int realintval = Int32.Parse(intval);
 			return new IntStringSplitterResult(realintval, strval);
 		}
-		public static DoubleStringSplitterResult SplitDoubleStringParts(this string value)
-		{
-			return SplitDoubleStringParts(value, 0);
-		}
-		public static DoubleStringSplitterResult SplitDoubleStringParts(this string value, int start)
+		public static DoubleStringSplitterResult SplitDoubleStringParts(this string value, int start = 0)
 		{
 			string intval = String.Empty;
 			string strval = String.Empty;
@@ -104,6 +110,28 @@ namespace MBS.Framework
 
 			double realintval = Double.Parse(intval);
 			return new DoubleStringSplitterResult(realintval, strval);
+		}
+		public static DecimalStringSplitterResult SplitDecimalStringParts(this string value, int start = 0)
+		{
+			string intval = String.Empty;
+			string strval = String.Empty;
+
+			int i = start;
+			for (i = start; i < value.Length; i++)
+			{
+				if (value[i] == '.' || (value[i] >= '0' && value[i] <= '9'))
+				{
+					intval += value[i];
+				}
+				else
+				{
+					break;
+				}
+			}
+			strval = value.Substring(i);
+
+			decimal realintval = Decimal.Parse(intval);
+			return new DecimalStringSplitterResult(realintval, strval);
 		}
 	}
 }
