@@ -163,7 +163,7 @@ namespace MBS.Framework
 				List<EventHandler> c = _CommandEventHandlers[id];
 				for (int i = 0; i < c.Count; i++)
 				{
-					c[i](cmd, new CommandEventArgs(cmd, namedParameters));
+					c[i](this, new CommandEventArgs(cmd, namedParameters));
 				}
 				return;
 			}
