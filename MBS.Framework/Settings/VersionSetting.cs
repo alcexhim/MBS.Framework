@@ -1,10 +1,10 @@
 //
-//  SettingsProfile.cs
+//  VersionSetting.cs
 //
 //  Author:
 //       Michael Becker <alcexhim@gmail.com>
 //
-//  Copyright (c) 2020 Mike Becker's Software
+//  Copyright (c) 2021 Mike Becker's Software
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -19,29 +19,15 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
-namespace MBS.Framework
+namespace MBS.Framework.Settings
 {
-	public class SettingsProfile
+	public class VersionSetting : Setting
 	{
-		public class SettingsProfileCollection
-			: System.Collections.ObjectModel.Collection<SettingsProfile>
+		public int ComponentCount { get; set; } = 4;
+
+		public VersionSetting(string name, string title, Version defaultValue = null, int componentCount = 4) : base(name, title, defaultValue)
 		{
-
-		}
-
-		public static readonly Guid AllUsersGUID = new Guid("{6c1e84c6-7cb8-4798-b000-349dba816114}");
-		public static readonly Guid ThisUserGUID = new Guid("{a550229d-05e1-4a93-96a6-98ae1c69b847}");
-
-		public Guid ID { get; set; } = Guid.Empty;
-		public string Title { get; set; } = null;
-
-		public SettingsProfile()
-		{
-		}
-		public SettingsProfile(Guid id, string title)
-		{
-			ID = id;
-			Title = title;
+			ComponentCount = componentCount;
 		}
 	}
 }

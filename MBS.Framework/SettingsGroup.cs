@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using MBS.Framework.Settings;
 
 namespace MBS.Framework
 {
@@ -145,6 +146,21 @@ namespace MBS.Framework
 		}
 		public Setting.SettingCollection Settings { get; } = new Setting.SettingCollection();
 		public int Priority { get; set; } = -1;
+		public int Count
+		{
+			get
+			{
+				int count = Settings.Count;
+				for (int i = 0; i < Settings.Count; i++)
+				{
+					if (Settings[i] is GroupSetting)
+					{
+						count += (Settings[i] as GroupSetting).Count;
+					}
+				}
+				return count;
+			}
+		}
 
 		public override string ToString ()
 		{

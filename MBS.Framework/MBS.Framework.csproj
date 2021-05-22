@@ -112,6 +112,8 @@
     <Compile Include="CommandStylePreset.cs" />
     <Compile Include="Settings\CustomSetting.cs" />
     <Compile Include="CardinalDirection.cs" />
+    <Compile Include="CustomSettingsProvider.cs" />
+    <Compile Include="Settings\VersionSetting.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />

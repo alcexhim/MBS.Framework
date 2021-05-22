@@ -23,7 +23,7 @@ namespace MBS.Framework.Settings
 {
 	public class ChoiceSetting : Setting
 	{
-		public ChoiceSetting(string name, string title, ChoiceSettingValue defaultValue = null, ChoiceSettingValue[] values = null) : base(name, title, null)
+		public ChoiceSetting(string name, string title, object defaultValue = null, ChoiceSettingValue[] values = null, bool multiple = false) : base(name, title, null)
 		{
 			if (values == null)
 			{
@@ -31,9 +31,9 @@ namespace MBS.Framework.Settings
 			}
 			if (defaultValue != null)
 			{
-				if (defaultValue.Value != null)
+				if (defaultValue != null)
 				{
-					base.DefaultValue = defaultValue.Value.ToString();
+					base.DefaultValue = defaultValue;
 				}
 				else
 				{
@@ -45,6 +45,7 @@ namespace MBS.Framework.Settings
 			{
 				ValidValues.Add(value);
 			}
+			MultipleSelect = multiple;
 		}
 
 		public class ChoiceSettingValue
@@ -58,6 +59,15 @@ namespace MBS.Framework.Settings
 			public string Title { get; set; } = String.Empty;
 			public object Value { get; set; } = null;
 
+			public ChoiceSettingValue(object value)
+			{
+				if (value != null)
+				{
+					Name = value.ToString();
+					Title = value.ToString();
+				}
+				Value = value;
+			}
 			public ChoiceSettingValue(string name, string title, object value)
 			{
 				Name = name;
@@ -70,5 +80,6 @@ namespace MBS.Framework.Settings
 		public ChoiceSettingValue SelectedValue { get; set; } = null;
 
 		public bool RequireSelectionFromList { get; set; } = true;
+		public bool MultipleSelect { get; set; } = false;
 	}
 }

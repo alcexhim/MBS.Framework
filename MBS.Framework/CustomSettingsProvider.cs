@@ -1,5 +1,5 @@
 //
-//  SettingsProfile.cs
+//  CustomSettingsProvider.cs
 //
 //  Author:
 //       Michael Becker <alcexhim@gmail.com>
@@ -19,29 +19,44 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using MBS.Framework;
+
 namespace MBS.Framework
 {
-	public class SettingsProfile
+	public class CustomSettingsProvider : SettingsProvider
 	{
-		public class SettingsProfileCollection
-			: System.Collections.ObjectModel.Collection<SettingsProfile>
-		{
-
-		}
-
-		public static readonly Guid AllUsersGUID = new Guid("{6c1e84c6-7cb8-4798-b000-349dba816114}");
-		public static readonly Guid ThisUserGUID = new Guid("{a550229d-05e1-4a93-96a6-98ae1c69b847}");
-
-		public Guid ID { get; set; } = Guid.Empty;
-		public string Title { get; set; } = null;
-
-		public SettingsProfile()
+		public CustomSettingsProvider()
 		{
 		}
-		public SettingsProfile(Guid id, string title)
+		public CustomSettingsProvider(SettingsGroup[] groups)
 		{
-			ID = id;
-			Title = title;
+			for (int i = 0; i < groups.Length; i++)
+			{
+				SettingsGroups.Add(groups[i]);
+			}
+		}
+
+		public event EventHandler SettingsLoaded;
+		protected virtual void OnSettingsLoaded(EventArgs e)
+		{
+			SettingsLoaded?.Invoke(this, e);
+		}
+		protected override void LoadSettingsInternal()
+		{
+			base.LoadSettingsInternal();
+			OnSettingsLoaded(EventArgs.Empty);
+		}
+
+		public event EventHandler SettingsSaved;
+		protected virtual void OnSettingsSaved(EventArgs e)
+		{
+			SettingsSaved?.Invoke(this, e);
+		}
+
+		protected override void SaveSettingsInternal()
+		{
+			base.SaveSettingsInternal();
+			OnSettingsSaved(EventArgs.Empty);
 		}
 	}
 }

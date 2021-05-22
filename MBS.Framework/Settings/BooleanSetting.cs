@@ -23,7 +23,7 @@ namespace MBS.Framework.Settings
 {
 	public class BooleanSetting : Setting
 	{
-		public BooleanSetting(string name, string title, bool defaultValue = false) : base(name, title, defaultValue)
+		public BooleanSetting(string name, string title, bool defaultValue = false, bool enabled = true, bool visible = true) : base(name, title, defaultValue, enabled, visible)
 		{
 		}
 

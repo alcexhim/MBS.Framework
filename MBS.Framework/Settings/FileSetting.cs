@@ -32,10 +32,24 @@ namespace MBS.Framework.Settings
 	{
 		public bool RequireExistingFile { get; set; } = true;
 		public FileSettingMode Mode { get; set; } = FileSettingMode.Open;
+		/// <summary>
+		/// A semicolon-separated list of glob-style (*.xxx) filters used in the file selection dialog for this <see cref="FileSetting" />.
+		/// </summary>
+		/// <value>The file name filter.</value>
+		public string FileNameFilter { get; set; } = null;
 
-		public FileSetting(string name, string title, string defaultValue = "", bool requireExistingFile = true) : base(name, title, defaultValue)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FileSetting" /> class.
+		/// </summary>
+		/// <param name="name">Name.</param>
+		/// <param name="title">Title.</param>
+		/// <param name="defaultValue">Default value.</param>
+		/// <param name="requireExistingFile">If set to <c>true</c> require existing file.</param>
+		/// <param name="fileNameFilter">A semicolon-separated list of glob-style (*.xxx) filters used in the file selection dialog for this <see cref="FileSetting" />.</param>
+		public FileSetting(string name, string title, string defaultValue = "", bool requireExistingFile = true, string fileNameFilter = null) : base(name, title, defaultValue)
 		{
 			RequireExistingFile = requireExistingFile;
+			FileNameFilter = fileNameFilter;
 		}
 	}
 }

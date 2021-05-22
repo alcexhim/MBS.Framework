@@ -25,6 +25,21 @@ namespace MBS.Framework.Settings
 	{
 		public Setting.SettingCollection Options { get; } = new Setting.SettingCollection();
 		public Setting.SettingCollection HeaderSettings { get; } = new Setting.SettingCollection();
+		public int Count
+		{
+			get
+			{
+				int count = Options.Count;
+				for (int i = 0; i < Options.Count; i++)
+				{
+					if (Options[i] is GroupSetting)
+					{
+						count += (Options[i] as GroupSetting).Count;
+					}
+				}
+				return count;
+			}
+		}
 
 		public GroupSetting(string name, string title, Setting[] options = null) : base(name, title)
 		{
@@ -35,6 +50,24 @@ namespace MBS.Framework.Settings
 					Options.Add(option);
 				}
 			}
+		}
+
+		public Setting FindSetting(string name)
+		{
+			foreach (Setting s in Options)
+			{
+				if (s is GroupSetting)
+				{
+					Setting r = (s as GroupSetting).FindSetting(name);
+					if (r != null) return r;
+				}
+				else
+				{
+					if (s.Name == name)
+						return s;
+				}
+			}
+			return null;
 		}
 	}
 }

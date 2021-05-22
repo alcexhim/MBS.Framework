@@ -25,12 +25,14 @@ namespace MBS.Framework
 {
 	public abstract class Setting
 	{
-		public Setting(string name, string title, object defaultValue = null)
+		public Setting(string name, string title, object defaultValue = null, bool enabled = true, bool visible = true)
 		{
 			Name = name;
 			Title = title;
 			DefaultValue = defaultValue;
 			mvarValue = defaultValue;
+			Enabled = enabled;
+			Visible = visible;
 		}
 
 		public Guid ID { get; set; } = Guid.Empty;
@@ -40,6 +42,9 @@ namespace MBS.Framework
 
 		public string Title { get; set; } = String.Empty;
 		public string Description { get; set; } = String.Empty;
+
+		public bool Enabled { get; set; } = true;
+		public bool Visible { get; set; } = true;
 
 		public class SettingCollection
 			: System.Collections.ObjectModel.Collection<Setting>

@@ -23,8 +23,11 @@ namespace MBS.Framework.Settings
 {
 	public class TextSetting : Setting
 	{
-		public TextSetting(string name, string title, string defaultValue = "") : base(name, title, defaultValue)
+		public int? MaximumLength { get; set; } = null;
+
+		public TextSetting(string name, string title, string defaultValue = "", int? maxLength = null) : base(name, title, defaultValue)
 		{
+			MaximumLength = maxLength;
 		}
 	}
 }

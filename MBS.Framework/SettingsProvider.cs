@@ -19,6 +19,7 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using MBS.Framework.Settings;
 
 namespace MBS.Framework
 {
@@ -53,6 +54,27 @@ namespace MBS.Framework
 
 		public SettingsGroup.SettingsGroupCollection SettingsGroups { get; } = new SettingsGroup.SettingsGroupCollection();
 
+		public Setting FindSetting(string name)
+		{
+			foreach (SettingsGroup sg in SettingsGroups)
+			{
+				foreach (Setting s in sg.Settings)
+				{
+					if (s is GroupSetting)
+					{
+						Setting r = (s as GroupSetting).FindSetting(name);
+						if (r != null) return r;
+					}
+					else
+					{
+						if (s.Name == name)
+							return s;
+					}
+				}
+			}
+			return null;
+		}
+
 		protected virtual void InitializeInternal()
 		{
 		}
@@ -75,6 +97,19 @@ namespace MBS.Framework
 		public void SaveSettings()
 		{
 			SaveSettingsInternal ();
+		}
+
+		public int Count
+		{
+			get
+			{
+				int count = 0;
+				for (int i = 0; i < SettingsGroups.Count; i++)
+				{
+					count += SettingsGroups[i].Count;
+				}
+				return count;
+			}
 		}
 	}
 }
