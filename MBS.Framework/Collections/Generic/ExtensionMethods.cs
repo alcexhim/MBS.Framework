@@ -54,5 +54,13 @@ namespace MBS.Framework.Collections.Generic
 			}
 			return ((List<T>)(cacheOfT[obj][typeof(T)])).ToArray();
 		}
+
+		public static void AddRange<T>(this IList<T> list, IEnumerable<T> items)
+		{
+			foreach (T item in items)
+			{
+				list.Add(item);
+			}
+		}
 	}
 }
