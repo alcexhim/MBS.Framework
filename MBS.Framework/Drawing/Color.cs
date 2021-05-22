@@ -80,6 +80,9 @@ namespace MBS.Framework.Drawing
 		}
 		public static Color FromString(string value)
 		{
+			if (value == null)
+				return Color.Empty;
+
 			/*
 			if (value.StartsWith("@"))
 			{
