@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 using System;
+using MBS.Framework.Collections.Generic;
 
 namespace MBS.Framework.Drawing
 {
@@ -43,25 +44,73 @@ namespace MBS.Framework.Drawing
 		private bool mvarIsFull;
 		public bool IsEmpty { get { return !mvarIsFull; } }
 
+		public override bool Equals(object obj)
+		{
+			if (!(obj is Measurement))
+				return false;
+
+			if (((Measurement)obj).Value.Equals(Value) && (((Measurement)obj).Unit == Unit))
+				return true;
+
+			return base.Equals(obj);
+		}
+
+		public static bool operator == (Measurement left, Measurement right)
+		{
+			return (left.Equals(right));
+		}
+		public static bool operator != (Measurement left, Measurement right)
+		{
+			return (!left.Equals(right));
+		}
+
 		public static Measurement Parse(string value)
 		{
+			if (value == null)
+				return Measurement.Empty;
+
 			DoubleStringSplitterResult dssr = NumericStringSplitter.SplitDoubleStringParts(value);
 			double val = dssr.DoublePart;
-			MeasurementUnit unit;
-			switch (dssr.StringPart.ToLower())
-			{
-				case "cm": unit = MeasurementUnit.Cm; break;
-				case "em": unit = MeasurementUnit.Em; break;
-				case "ex": unit = MeasurementUnit.Ex; break;
-				case "in": unit = MeasurementUnit.Inch; break;
-				case "mm": unit = MeasurementUnit.Mm; break;
-				case "%": unit = MeasurementUnit.Percentage; break;
-				case "pc": unit = MeasurementUnit.Pica; break;
-				case "px": unit = MeasurementUnit.Pixel; break;
-				case "pt": unit = MeasurementUnit.Point; break;
-				default: unit = MeasurementUnit.Pixel; break;
-			}
+			MeasurementUnit unit = MeasurementUnitFromString(dssr.StringPart);
 			return new Measurement(val, unit);
+		}
+
+		static Measurement()
+		{
+			RegisterMeasurementUnit(MeasurementUnit.Cm, "cm");
+			RegisterMeasurementUnit(MeasurementUnit.Em, "em");
+			RegisterMeasurementUnit(MeasurementUnit.Ex, "ex");
+			RegisterMeasurementUnit(MeasurementUnit.Inch, "in");
+			RegisterMeasurementUnit(MeasurementUnit.Mm, "mm");
+			RegisterMeasurementUnit(MeasurementUnit.Percentage, "%");
+			RegisterMeasurementUnit(MeasurementUnit.Pica, "pc");
+			RegisterMeasurementUnit(MeasurementUnit.Pixel, "px");
+			RegisterMeasurementUnit(MeasurementUnit.Point, "pt");
+
+			RegisterMeasurementUnit(MeasurementUnit.Degrees, "deg");
+			RegisterMeasurementUnit(MeasurementUnit.Radians, "rad");
+			RegisterMeasurementUnit(MeasurementUnit.Gradians, "grad");
+		}
+
+		private static BidirectionalDictionary<MeasurementUnit, string> _measurementUnits = new BidirectionalDictionary<MeasurementUnit, string>();
+		private static void RegisterMeasurementUnit(MeasurementUnit unit, string value)
+		{
+			_measurementUnits.Add(unit, value);
+		}
+
+		public static MeasurementUnit MeasurementUnitFromString(string value)
+		{
+			if (_measurementUnits.ContainsValue2(value))
+				return _measurementUnits.GetValue1(value);
+
+			throw new ArgumentException("must be a known MeasurementUnit abbreviation value", nameof(value));
+		}
+		public static string MeasurementUnitToString(MeasurementUnit unit)
+		{
+			if (_measurementUnits.ContainsValue1(unit))
+				return _measurementUnits.GetValue2(unit);
+
+			throw new ArgumentException("must be a known MeasurementUnit enumeration value", nameof(unit));
 		}
 
 		public double GetValue(MeasurementUnit unit = MeasurementUnit.Pixel, int dpi = 96, Rectangle parentRect = default(Rectangle))
@@ -227,6 +276,11 @@ namespace MBS.Framework.Drawing
 		public static Measurement operator *(Measurement left, Measurement right)
 		{
 			return new Measurement((left.Value * right.GetValue(left.Unit)), left.Unit);
+		}
+
+		public override string ToString()
+		{
+			return String.Format("{0}{1}", Value, MeasurementUnitToString(Unit));
 		}
 	}
 }

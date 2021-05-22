@@ -43,6 +43,10 @@ namespace MBS.Framework.Drawing
 		/// <summary>Measurement is relative to the height of the parent element's font.</summary>
 		Em,
 		/// <summary>Measurement is relative to the height of the lowercase letter x of the parent element's font.</summary>
-		Ex
+		Ex,
+
+		Degrees,
+		Radians,
+		Gradians
 	}
 }
