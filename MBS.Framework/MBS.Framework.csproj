@@ -113,6 +113,7 @@
     <Compile Include="Settings\CustomSetting.cs" />
     <Compile Include="CardinalDirection.cs" />
     <Compile Include="TriState.cs" />
+    <Compile Include="Conversion.cs" />
     <Compile Include="UserInterface\HorizontalAlignment.cs" />
     <Compile Include="UserInterface\VerticalAlignment.cs" />
     <Compile Include="CustomSettingsProvider.cs" />
