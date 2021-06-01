@@ -25,12 +25,12 @@ using System.Runtime.CompilerServices;
 // Information about this assembly is defined by the following attributes.
 // Change them to the values specific to your project.
 
-[assembly: AssemblyTitle("MBS.Framework")]
+[assembly: AssemblyTitle("Universal Application Toolkit - Core")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyCompany("Mike Becker's Software")]
+[assembly: AssemblyProduct("Universal Application Toolkit")]
+[assembly: AssemblyCopyright("Copyright © 2015-2021 Mike Becker's Software")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
