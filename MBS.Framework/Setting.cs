@@ -45,6 +45,11 @@ namespace MBS.Framework
 
 		public bool Enabled { get; set; } = true;
 		public bool Visible { get; set; } = true;
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="Setting"/> is required to have a value.
+		/// </summary>
+		/// <value><c>true</c> if this <see cref="Setting" /> is required to have a value; otherwise, <c>false</c>.</value>
+		public bool Required { get; set; } = false;
 
 		public class SettingCollection
 			: System.Collections.ObjectModel.Collection<Setting>
