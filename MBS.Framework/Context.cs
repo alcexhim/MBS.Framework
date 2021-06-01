@@ -80,6 +80,12 @@ namespace MBS.Framework
 		}
 
 		private Dictionary<string, List<EventHandler>> _CommandEventHandlers = new Dictionary<string, List<EventHandler>>();
+		/// <summary>
+		/// Attachs an event handler for the command with the ID specified by <paramref name="commandID" />.
+		/// </summary>
+		/// <returns><c>true</c>, if command event handler was attached, <c>false</c> otherwise.</returns>
+		/// <param name="commandID">The ID of the <see cref="Command" /> for which to attach an event handler.</param>
+		/// <param name="handler">The event handler to invoke when the <see cref="Command" /> is executed.</param>
 		public bool AttachCommandEventHandler(string commandID, EventHandler handler)
 		{
 			// handle command event handlers attached without a Command instance
@@ -94,6 +100,13 @@ namespace MBS.Framework
 			}
 			return false;
 		}
+		/// <summary>
+		/// Executes the command (i.e., calls all attached <see cref="EventHandler" />s for the <see cref="Command" />) with
+		/// the given <paramref name="commandID" />, passing in the given parameters in an instance of <see cref="CommandEventArgs" />.
+		/// </summary>
+		/// <returns><c>true</c>, if command was executed, <c>false</c> otherwise.</returns>
+		/// <param name="commandID">Command identifier.</param>
+		/// <param name="namedParameters">Named parameters.</param>
 		public bool ExecuteCommand(string commandID, KeyValuePair<string, object>[] namedParameters = null)
 		{
 			if (_CommandEventHandlers.ContainsKey(commandID))
