@@ -37,8 +37,12 @@ namespace MBS.Framework.Logic
 		}
 
 		public string Name { get; set; } = null;
+		public string Title { get; set; } = null;
 		public Expression Expression { get; set; } = null;
 
+		public Variable()
+		{
+		}
 		public Variable(string name, Expression expression = null)
 		{
 			Name = name;
