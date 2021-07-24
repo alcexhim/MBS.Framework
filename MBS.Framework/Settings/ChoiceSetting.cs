@@ -77,7 +77,7 @@ namespace MBS.Framework.Settings
 		}
 
 		public ChoiceSettingValue.ChoiceSettingValueCollection ValidValues { get; } = new ChoiceSettingValue.ChoiceSettingValueCollection();
-		public ChoiceSettingValue SelectedValue { get; set; } = null;
+		public object SelectedValue { get; set; } = null;
 
 		public bool RequireSelectionFromList { get; set; } = true;
 		public bool MultipleSelect { get; set; } = false;
