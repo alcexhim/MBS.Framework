@@ -120,6 +120,7 @@
     <Compile Include="UserInterface\VerticalAlignment.cs" />
     <Compile Include="CustomSettingsProvider.cs" />
     <Compile Include="Settings\VersionSetting.cs" />
+    <Compile Include="MathExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
