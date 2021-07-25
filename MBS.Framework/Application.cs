@@ -112,6 +112,48 @@ namespace MBS.Framework
 			}
 		}
 
+		private string mvarBasePath = null;
+		public string BasePath
+		{
+			get
+			{
+				if (mvarBasePath == null)
+				{
+					// Set up the base path for the current application. Should this be able to be
+					// overridden with a switch (/basepath:...) ?
+					mvarBasePath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
+				}
+				return mvarBasePath;
+			}
+		}
+
+		public string[] EnumerateDataPaths()
+		{
+			return new string[]
+			{
+				// first look in the application root directory since this will be overridden by everything else
+				BasePath,
+				// then look in /usr/share/universal-editor or C:\ProgramData\Mike Becker's Software\Universal Editor
+				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				{
+					System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData),
+					ShortName
+				}),
+				// then look in ~/.local/share/universal-editor or C:\Users\USERNAME\AppData\Local\Mike Becker's Software\Universal Editor
+				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				{
+					System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+					ShortName
+				}),
+				// then look in ~/.universal-editor or C:\Users\USERNAME\AppData\Roaming\Mike Becker's Software\Universal Editor
+				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				{
+					System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
+					ShortName
+				})
+			};
+		}
+
 		public string ShortName { get; set; }
 		public string Title { get; set; } = String.Empty;
 		public int ExitCode { get; protected set; } = 0;
@@ -295,6 +337,12 @@ namespace MBS.Framework
 			Shutdown?.Invoke(this, e);
 		}
 
+		public void Restart()
+		{
+			Stop();
+
+			Start();
+		}
 
 		protected virtual void StopInternal(int exitCode)
 		{
