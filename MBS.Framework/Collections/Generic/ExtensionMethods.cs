@@ -62,5 +62,16 @@ namespace MBS.Framework.Collections.Generic
 				list.Add(item);
 			}
 		}
+
+		public static T[] ToNullTerminatedArray<T>(this IEnumerable<T> enumerable) where T : class
+		{
+			List<T> list = new List<T>();
+			foreach (T name in enumerable)
+			{
+				list.Add(name);
+			}
+			list.Add(null);
+			return list.ToArray();
+		}
 	}
 }
