@@ -23,5 +23,18 @@ namespace MBS.Framework
 		{
 			return (x * Math.Pow(2, exp));
 		}
+
+		/// <summary>
+		/// Returns a random <see cref="long" /> between
+		/// <paramref name="minValue"/> and <paramref name="maxValue" />.
+		/// </summary>
+		/// <returns>The random number.</returns>
+		/// <param name="random">The instance of <see cref="Random" /> being extended.</param>
+		/// <param name="minValue">The inclusive minimum bound of the resulting random value.</param>
+		/// <param name="maxValue">The exclusive maximum bound of the resulting random value.</param>
+		public static long NextLong (this Random random, long minValue = 0, long maxValue = long.MaxValue)
+		{
+			return (long)((random.NextDouble() * (maxValue - minValue)) + minValue);
+		}
 	}
 }
