@@ -28,6 +28,7 @@ namespace MBS.Framework.Drawing
 		public static readonly Color Empty;
 
 		private bool isNotEmpty;
+		public bool IsEmpty { get { return !isNotEmpty; } }
 
 		private double mvarR;
 		public double R { get { return mvarR; } set { mvarR = value; } }
