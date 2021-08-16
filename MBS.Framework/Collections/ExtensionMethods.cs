@@ -46,5 +46,16 @@ namespace MBS.Framework.Collections
 			list.Add(null);
 			return list.ToArray();
 		}
+		/// <summary>
+		/// Convenience function to copy from any <see cref="IEnumerable" />
+		/// into any <see cref="IList"/>.
+		/// </summary>
+		public static void CopyTo(this IEnumerable source, IList dest)
+		{
+			foreach (object o in source)
+			{
+				dest.Add(o);
+			}
+		}
 	}
 }
