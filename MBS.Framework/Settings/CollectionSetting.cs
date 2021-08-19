@@ -26,12 +26,15 @@ namespace MBS.Framework.Settings
 		public Setting.SettingCollection Settings { get; } = new Setting.SettingCollection();
 		public SettingsGroup.SettingsGroupCollection Items { get; } = new SettingsGroup.SettingsGroupCollection();
 
-		public CollectionSetting(string name, string title, SettingsGroup group) : base(name, title, null)
+		public string SingularItemTitle { get; set; } = null;
+
+		public CollectionSetting(string name, string title, SettingsGroup group, string singularItemTitle = null) : base(name, title, null)
 		{
 			for (int i = 0; i < group.Settings.Count; i++)
 			{
 				Settings.Add(group.Settings[i]);
 			}
+			SingularItemTitle = singularItemTitle;
 		}
 	}
 }
