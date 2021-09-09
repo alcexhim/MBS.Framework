@@ -51,6 +51,9 @@ namespace MBS.Framework
 		private string mvarCommandID = String.Empty;
 		public string CommandID { get { return mvarCommandID; } set { mvarCommandID = value; } }
 
+		public CommandReferenceCommandItem()
+		{
+		}
 		public CommandReferenceCommandItem(string commandID)
 		{
 			mvarCommandID = commandID;
