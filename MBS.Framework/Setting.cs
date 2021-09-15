@@ -51,6 +51,9 @@ namespace MBS.Framework
 		/// <value><c>true</c> if this <see cref="Setting" /> is required to have a value; otherwise, <c>false</c>.</value>
 		public bool Required { get; set; } = false;
 
+		public string Prefix { get; set; } = null;
+		public string Suffix { get; set; } = null;
+
 		public class SettingCollection
 			: System.Collections.ObjectModel.Collection<Setting>
 		{
