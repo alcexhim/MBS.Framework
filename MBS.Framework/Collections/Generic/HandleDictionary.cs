@@ -38,5 +38,10 @@ namespace MBS.Framework.Collections.Generic
 		{
 			_dict.Add(handle, obj);
 		}
+
+		public void Remove(TObject obj)
+		{
+			_dict.RemoveByValue2(obj);
+		}
 	}
 }
