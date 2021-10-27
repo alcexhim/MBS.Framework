@@ -79,6 +79,24 @@ namespace MBS.Framework.Drawing
 		}
 
 		/// <summary>
+		/// Creates a <see cref="Rectangle" /> from left, top, right, bottom coordinates.
+		/// </summary>
+		/// <returns>The ltrb.</returns>
+		/// <param name="left">Bounding box l.</param>
+		/// <param name="top">Bounding box t.</param>
+		/// <param name="right">Bounding box r.</param>
+		/// <param name="bottom">Bounding box b.</param>
+		public static Rectangle FromLTRB(double left, double top, double right, double bottom)
+		{
+			Rectangle rect = new Rectangle();
+			rect.X = left;
+			rect.Y = top;
+			rect.Right = right;
+			rect.Bottom = bottom;
+			return rect;
+		}
+
+		/// <summary>
 		/// Normalize this instance.
 		/// </summary>
 		/// <returns>The normalize.</returns>
