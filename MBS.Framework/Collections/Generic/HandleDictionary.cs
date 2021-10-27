@@ -21,27 +21,53 @@
 using System;
 namespace MBS.Framework.Collections.Generic
 {
-	public class HandleDictionary<TObject>
+	public class HandleDictionary<TObject> : HandleDictionary<TObject, IntPtr>
 	{
-		private BidirectionalDictionary<IntPtr, TObject> _dict = new BidirectionalDictionary<IntPtr, TObject>();
 
-		public TObject GetObject(IntPtr handle)
+	}
+	public class HandleDictionary<TObject, THandle>
+	{
+		private BidirectionalDictionary<THandle, TObject> _dict = new BidirectionalDictionary<THandle, TObject>();
+
+		public int Count { get { return _dict.Count; } }
+
+		public TObject GetObject(THandle handle)
 		{
 			return _dict.GetValue2(handle);
 		}
-		public IntPtr GetHandle(TObject obj)
+		public THandle GetHandle(TObject obj)
 		{
 			return _dict.GetValue1(obj);
 		}
-
-		public void Add(IntPtr handle, TObject obj)
+		public void Add(THandle handle, TObject obj)
 		{
 			_dict.Add(handle, obj);
 		}
 
+		/// <summary>
+		/// Removes the <typeparamref name="THandle" /> of the given <paramref name="obj" />.
+		/// </summary>
+		/// <param name="obj">The object to remove.</param>
 		public void Remove(TObject obj)
 		{
 			_dict.RemoveByValue2(obj);
+		}
+		/// <summary>
+		/// Removes the <typeparamref name="TObject" /> represented by the given <paramref name="handle" />.
+		/// </summary>
+		/// <param name="handle">The handle of the <typeparamref name="TObject" /> to remove.</param>
+		public void Remove(THandle handle)
+		{
+			_dict.RemoveByValue1(handle);
+		}
+	}
+	public static class HandleDictionaryExtensions
+	{
+		public static ushort Add<TObject>(this HandleDictionary<TObject, ushort> dict, TObject obj)
+		{
+			ushort index = (ushort)(dict.Count + 1);
+			dict.Add(index, obj);
+			return index;
 		}
 	}
 }
