@@ -36,5 +36,20 @@ namespace MBS.Framework
 		{
 			return (long)((random.NextDouble() * (maxValue - minValue)) + minValue);
 		}
+
+		/// <summary>
+		/// Calculates the sum of all elements in the array.
+		/// </summary>
+		/// <returns>The sum of all elements in the array.</returns>
+		/// <param name="array">The array to sum.</param>
+		public static ushort Sum(this ushort[] array)
+		{
+			ushort value = 0;
+			for (int i = 0; i < array.Length; i++)
+			{
+				value += array[i];
+			}
+			return value;
+		}
 	}
 }
