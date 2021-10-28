@@ -23,7 +23,6 @@ namespace MBS.Framework.Collections.Generic
 {
 	public class HandleDictionary<TObject> : HandleDictionary<TObject, IntPtr>
 	{
-
 	}
 	public class HandleDictionary<TObject, THandle>
 	{
@@ -42,6 +41,15 @@ namespace MBS.Framework.Collections.Generic
 		public void Add(THandle handle, TObject obj)
 		{
 			_dict.Add(handle, obj);
+		}
+
+		public bool Contains(TObject obj)
+		{
+			return _dict.ContainsValue2(obj);
+		}
+		public bool Contains(THandle handle)
+		{
+			return _dict.ContainsValue1(handle);
 		}
 
 		/// <summary>
