@@ -92,6 +92,7 @@ namespace MBS.Framework
 		/// <summary>
 		/// Executes this <see cref="Command"/>.
 		/// </summary>
+		[Obsolete("Please use Application.ExecuteCommand. Command.Execute does not always work and will be removed in a future release.")]
 		public void Execute()
 		{
 			if (Executed != null) Executed(this, EventArgs.Empty);

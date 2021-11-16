@@ -16,6 +16,7 @@ namespace MBS.Framework
 		ArrowUp,
 
 		Bold,
+		Bookmarks,
 		Cancel,
 		CapsLockWarning,			// not for buttons
 		CDROM,

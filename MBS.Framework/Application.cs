@@ -20,11 +20,17 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 namespace MBS.Framework
 {
 	public class Application
 	{
+		/// <summary>
+		/// Implements a <see cref="Context.ContextCollection" /> which notifies
+		/// the containing <see cref="Application" /> of context addition and
+		/// removal.
+		/// </summary>
 		public class ApplicationContextCollection
 			: Context.ContextCollection
 		{
@@ -48,12 +54,29 @@ namespace MBS.Framework
 			}
 		}
 
+		/// <summary>
+		/// Gets or sets the currently-running <see cref="Application" />
+		/// instance.
+		/// </summary>
+		/// <value>
+		/// The currently-running <see cref="Application" /> instance.
+		/// </value>
 		public static Application Instance { get; set; } = null;
 
 		protected virtual Command FindCommandInternal(string commandID)
 		{
 			return null;
 		}
+		/// <summary>
+		/// Finds the command with the given <paramref name="commandID" />,
+		/// searching across application-global commands as well as commands
+		/// defined in the currently-loaded <see cref="Context" />s.
+		/// </summary>
+		/// <returns>
+		/// The command with the given <paramref name="commandID" />, or
+		/// <see langword="null" /> if the command was not found.
+		/// </returns>
+		/// <param name="commandID">Command identifier.</param>
 		public Command FindCommand(string commandID)
 		{
 			Command cmd = Commands[commandID];
@@ -131,7 +154,7 @@ namespace MBS.Framework
 		{
 			return new string[]
 			{
-				// first look in the application root directory since this will be overridden by everything else
+				// first look in the application root directory since this will override everything else
 				BasePath,
 				// then look in /usr/share/universal-editor or C:\ProgramData\Mike Becker's Software\Universal Editor
 				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
@@ -173,6 +196,13 @@ namespace MBS.Framework
 
 		private Dictionary<string, List<EventHandler>> _CommandEventHandlers = new Dictionary<string, List<EventHandler>>();
 		public Command.CommandCollection Commands { get; } = new Command.CommandCollection();
+
+		/// <summary>
+		/// Attachs the specified <see cref="EventHandler" /> to handle the <see cref="Command" /> with the given <paramref name="commandID" />.
+		/// </summary>
+		/// <returns><c>true</c>, if the command was found, <c>false</c> otherwise.</returns>
+		/// <param name="commandID">Command identifier.</param>
+		/// <param name="handler">Handler.</param>
 		public bool AttachCommandEventHandler(string commandID, EventHandler handler)
 		{
 			Command cmd = Commands[commandID];
@@ -195,6 +225,11 @@ namespace MBS.Framework
 			return false;
 		}
 
+		/// <summary>
+		/// Executes the command with the given <paramref name="id" />.
+		/// </summary>
+		/// <param name="id">Identifier.</param>
+		/// <param name="namedParameters">Named parameters.</param>
 		public void ExecuteCommand(string id, KeyValuePair<string, object>[] namedParameters = null)
 		{
 			Command cmd = Commands[id];
@@ -260,25 +295,53 @@ namespace MBS.Framework
 		// CONTEXTS
 
 		/// <summary>
-		/// Gets a collection of <see cref="Context" /> objects representing system, application, user, and custom contexts for settings and other items.
+		/// Gets a collection of <see cref="Context" /> objects representing
+		/// system, application, user, and custom contexts for settings and other
+		/// items.
 		/// </summary>
-		/// <value>A collection of <see cref="Context" /> objects representing cpublic  for settings and other items.</value>
+		/// <value>
+		/// A collection of <see cref="Context" /> objects representing system,
+		/// application, user, and custom contexts for settings and other items.
+		/// </value>
 		public ApplicationContextCollection Contexts { get; } = new ApplicationContextCollection();
 
+		/// <summary>
+		/// The event raised when a <see cref="Context" /> is added to the
+		/// <see cref="Application" />.
+		/// </summary>
 		public ContextChangedEventHandler ContextAdded;
+		/// <summary>
+		/// Called when a <see cref="Context" /> is added to the
+		/// <see cref="Application" />. The default behavior is to simply fire
+		/// the <see cref="ContextAdded" /> event. Implementations should handle
+		/// adding context-specific behaviors and UI elements in this method.
+		/// </summary>
+		/// <param name="e">Event arguments.</param>
 		protected virtual void OnContextAdded(ContextChangedEventArgs e)
 		{
 			ContextAdded?.Invoke(this, e);
 		}
 
+		/// <summary>
+		/// The event raised when a <see cref="Context" /> is removed from the
+		/// <see cref="Application" />.
+		/// </summary>
 		public ContextChangedEventHandler ContextRemoved;
+		/// <summary>
+		/// Called when a <see cref="Context" /> is removed from the
+		/// <see cref="Application" />. The default behavior is to simply fire
+		/// the <see cref="ContextRemoved" /> event. Implementations should handle
+		/// removing context-specific behaviors and UI elements in this method.
+		/// </summary>
+		/// <param name="e">Event arguments.</param>
 		protected virtual void OnContextRemoved(ContextChangedEventArgs e)
 		{
 			ContextRemoved?.Invoke(this, e);
 		}
 
 		/// <summary>
-		/// Handles updating the menus, toolbars, keyboard shortcuts, and other UI elements associated with the application <see cref="Context" />.
+		/// Handles updating the menus, toolbars, keyboard shortcuts, and other
+		/// UI elements associated with the application <see cref="Context" />.
 		/// </summary>
 		private void AddContext(Context ctx)
 		{
@@ -286,34 +349,55 @@ namespace MBS.Framework
 		}
 
 		/// <summary>
-		/// Handles updating the menus, toolbars, keyboard shortcuts, and other UI elements associated with the application <see cref="Context" />.
+		/// Handles updating the menus, toolbars, keyboard shortcuts, and other
+		/// UI elements associated with the application <see cref="Context" />.
 		/// </summary>
 		private void RemoveContext(Context ctx)
 		{
 			OnContextRemoved(new ContextChangedEventArgs(ctx));
 		}
 
-		// LOGGING
+		/// <summary>
+		/// Log the specified message.
+		/// </summary>
+		/// <param name="message">Message.</param>
 		public void Log(string message)
 		{
 			Log(null, 0, message);
 		}
+		/// <summary>
+		/// Log the specified message, including information about the relevant
+		/// object instance or static class <see cref="Type" />, line number of
+		/// the corresponding source code.
+		/// </summary>
+		/// <param name="obj">Object.</param>
+		/// <param name="lineNumber">Line number.</param>
+		/// <param name="message">Message.</param>
 		public void Log(object obj, int lineNumber, string message)
 		{
-			if (obj is Type)
+			Type type = (obj is Type ? ((Type)obj) : (obj != null ? obj.GetType() : null));
+			StringBuilder sb = new StringBuilder();
+			if (type != null)
 			{
-				Console.WriteLine("{0}: {1}", ((Type)obj).FullName, message);
+				sb.Append('[');
+				sb.Append(type.Assembly.GetName().Name);
+				sb.Append("] ");
+				sb.Append(type.FullName);
+				sb.Append('(');
+				sb.Append(lineNumber);
+				sb.Append(')');
+				sb.Append(": ");
 			}
-			else if (obj != null)
-			{
-				Console.WriteLine("{0}: {1}", obj.GetType().FullName, message);
-			}
-			else
-			{
-				Console.WriteLine("{0}", message);
-			}
+			sb.Append(message);
+
+			System.Diagnostics.Debug.WriteLine(sb);
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this <see cref="Application" /> is
+		/// currently in the process of shutting down.
+		/// </summary>
+		/// <value><c>true</c> if stopping; otherwise, <c>false</c>.</value>
 		public bool Stopping { get; private set; } = false;
 
 		protected virtual void OnStopping(System.ComponentModel.CancelEventArgs e)
@@ -325,7 +409,16 @@ namespace MBS.Framework
 
 		}
 
+		/// <summary>
+		/// The event raised when the <see cref="Stop" /> method is called, before
+		/// the application is stopped.
+		/// </summary>
 		public event System.ComponentModel.CancelEventHandler BeforeShutdown;
+		/// <summary>
+		/// Event handler for <see cref="BeforeShutdown" /> event. Called when the
+		/// <see cref="Stop" /> method is called, before the application is stopped.
+		/// </summary>
+		/// <param name="e">Event arguments.</param>
 		protected virtual void OnBeforeShutdown(System.ComponentModel.CancelEventArgs e)
 		{
 			BeforeShutdown?.Invoke(this, e);
@@ -344,9 +437,28 @@ namespace MBS.Framework
 			Start();
 		}
 
+		/// <summary>
+		/// Informs the underlying system backend that it is to begin the process
+		/// of application shutdown, gracefully ending the main loop before
+		/// returning the specified <paramref name="exitCode" /> to the operating
+		/// system.
+		/// </summary>
+		/// <param name="exitCode">
+		/// The exit code to return to the operating system.
+		/// </param>
 		protected virtual void StopInternal(int exitCode)
 		{
 		}
+
+		/// <summary>
+		/// Shuts down the application gracefully, calling any event handlers
+		/// attached to the shutdown event to give listeners the opportunity to
+		/// cancel the shutdown and passing the specified
+		/// <paramref name="exitCode" /> to the operating system.
+		/// </summary>
+		/// <param name="exitCode">
+		/// The exit code to return to the operating system.
+		/// </param>
 		public void Stop(int exitCode = 0)
 		{
 			if (Stopping)
