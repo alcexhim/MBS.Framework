@@ -25,6 +25,7 @@ namespace MBS.Framework.Settings
 	{
 		public decimal? MinimumValue { get; set; } = null;
 		public decimal? MaximumValue { get; set; } = null;
+		public int DecimalPlaces { get; set; } = 0;
 
 		public RangeSetting(string name, string title, decimal defaultValue = 0.0M, decimal? minimumValue = null, decimal? maximumValue = null) : base(name, title, defaultValue)
 		{
