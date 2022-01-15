@@ -63,6 +63,8 @@ namespace MBS.Framework
 		/// </value>
 		public static Application Instance { get; set; } = null;
 
+		public EventFilter.EventFilterCollection EventFilters { get; } = new EventFilter.EventFilterCollection();
+
 		protected virtual Command FindCommandInternal(string commandID)
 		{
 			return null;
@@ -486,5 +488,30 @@ namespace MBS.Framework
 			Stopping = false;
 		}
 
+		private Dictionary<Guid, object> _settings = new Dictionary<Guid, object>();
+		public T GetSetting<T>(Guid id, T defaultValue = default(T))
+		{
+			object value = GetSetting(id, (object)defaultValue);
+			if (value is T)
+			{
+				return (T)value;
+			}
+			else if (value is string && ((string)value).TryParse(typeof(T), out object val))
+			{
+				return (T)val;
+			}
+
+			return defaultValue;
+		}
+		public object GetSetting(Guid id, object defaultValue = null)
+		{
+			if (_settings.ContainsKey(id))
+				return _settings[id];
+			return defaultValue;
+		}
+		public void SetSetting<T>(Guid id, T value)
+		{
+			_settings[id] = value;
+		}
 	}
 }
