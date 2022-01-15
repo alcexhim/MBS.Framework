@@ -123,6 +123,7 @@
     <Compile Include="MathExtensions.cs" />
     <Compile Include="Collections\Generic\HandleDictionary.cs" />
     <Compile Include="Collections\ExtensionMethods.cs" />
+    <Compile Include="Collections\Generic\AppendOnlyLinkedList.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
