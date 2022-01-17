@@ -21,5 +21,5 @@
 using System;
 namespace MBS.Framework
 {
-	public delegate bool EventFilterDelegate<T>(ref T e, EventFilterType type) where T : EventArgs;
+	public delegate bool EventFilterDelegate<T>(EventFilterType type, ref T e) where T : EventArgs;
 }

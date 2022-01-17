@@ -64,7 +64,7 @@ namespace MBS.Framework
 		public bool Process(ref EventArgs e, EventFilterType type)
 		{
 			if (_processAction != null)
-				return _processAction(ref e, type);
+				return _processAction(type, ref e);
 
 			return true;
 		}
@@ -101,7 +101,7 @@ namespace MBS.Framework
 		public bool Process(ref T e, EventFilterType type)
 		{
 			if (_processAction != null)
-				return _processAction(ref e, type);
+				return _processAction(type, ref e);
 
 			return true;
 		}
