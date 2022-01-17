@@ -112,6 +112,7 @@ namespace MBS.Framework
 		public SettingsValue.SettingsValueCollection ScopedValues { get; } = new SettingsValue.SettingsValueCollection();
 
 		private object mvarValue = null;
+		private bool _valueSet = false;
 
 		public virtual object GetValue(Guid? scopeId = null)
 		{
@@ -122,7 +123,9 @@ namespace MBS.Framework
 					return ScopedValues[scopeId.Value].Value;
 				}
 			}
-			return mvarValue;
+			if (_valueSet)
+				return mvarValue;
+			return DefaultValue;
 		}
 		public virtual void SetValue(object value, Guid? scopeId = null)
 		{
@@ -140,9 +143,14 @@ namespace MBS.Framework
 			else
 			{
 				mvarValue = value;
+				_valueSet = true;
 			}
 		}
-		public T GetValue<T>(T defaultValue = default(T), Guid? scopeId = null)
+		public T GetValue<T>(Guid? scopeId = null)
+		{
+			return GetValue<T>(DefaultValue is T ? (T)DefaultValue : default(T), scopeId);
+		}
+		public T GetValue<T>(T defaultValue, Guid? scopeId = null)
 		{
 			try
 			{
@@ -163,6 +171,7 @@ namespace MBS.Framework
 		public void SetValue<T>(T value)
 		{
 			mvarValue = value;
+			_valueSet = true;
 		}
 	}
 }
