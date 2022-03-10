@@ -11,7 +11,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\Production.snk</AssemblyOriginatorKeyFile>
-    <ReleaseVersion>4.0.2021.01</ReleaseVersion>
+    <ReleaseVersion>4.0.2021.12</ReleaseVersion>
     <SynchReleaseVersion>false</SynchReleaseVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -127,6 +127,7 @@
     <Compile Include="EventFilter.cs" />
     <Compile Include="EventFilterType.cs" />
     <Compile Include="EventFilterDelegate.cs" />
+    <Compile Include="NativeHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
