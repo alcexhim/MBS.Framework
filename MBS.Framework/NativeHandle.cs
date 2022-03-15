@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 namespace MBS.Framework
 {
 	public class NativeHandle
@@ -16,6 +16,11 @@ namespace MBS.Framework
 		public override int GetHashCode()
 		{
 			return Handle.GetHashCode();
+		}
+
+		public bool Equals(NativeHandle<THandle> other)
+		{
+			return this.Handle.Equals(other.Handle);
 		}
 		public override bool Equals(object obj)
 		{
