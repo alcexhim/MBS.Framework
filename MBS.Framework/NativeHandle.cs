@@ -4,7 +4,7 @@ namespace MBS.Framework
 	public class NativeHandle
 	{
 	}
-	public class NativeHandle<THandle> : NativeHandle
+	public class NativeHandle<THandle> : NativeHandle, IEquatable<NativeHandle<THandle>>
 	{
 		public THandle Handle { get; private set; }
 
