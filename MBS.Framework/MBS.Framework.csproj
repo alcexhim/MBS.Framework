@@ -81,7 +81,6 @@
     <Compile Include="CommandLine.cs" />
     <Compile Include="CommandLineOption.cs" />
     <Compile Include="CommandLineOptionValueType.cs" />
-    <Compile Include="DefaultCommandLine.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="Command.cs" />
     <Compile Include="CommandEvent.cs" />
@@ -128,6 +127,8 @@
     <Compile Include="EventFilterType.cs" />
     <Compile Include="EventFilterDelegate.cs" />
     <Compile Include="NativeHandle.cs" />
+    <Compile Include="CommandLineParser.cs" />
+    <Compile Include="FindFileOptions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />

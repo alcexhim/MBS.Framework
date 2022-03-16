@@ -1,10 +1,10 @@
 //
-//  DefaultCommandLine.cs
+//  CommandLineParser.cs
 //
 //  Author:
-//       Mike Becker <alcexhim@gmail.com>
+//       Michael Becker <alcexhim@gmail.com>
 //
-//  Copyright (c) 2019 Mike Becker
+//  Copyright (c) 2022 Mike Becker's Software
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
@@ -21,15 +21,19 @@
 using System;
 namespace MBS.Framework
 {
-	public class DefaultCommandLine : CommandLine
+	public class CommandLineParser
 	{
-		public DefaultCommandLine()
+		protected virtual void ParseInternal(string[] arguments)
 		{
 			string[] ary1 = Environment.GetCommandLineArgs();
 			string[] ary2 = new string[ary1.Length - 1];
 
 			Array.Copy(ary1, 1, ary2, 0, ary1.Length - 1);
-			Arguments = ary2;
+			Application.Instance.CommandLine.Arguments = ary2;
+		}
+		public void Parse(string[] arguments)
+		{
+			ParseInternal(arguments);
 		}
 	}
 }
