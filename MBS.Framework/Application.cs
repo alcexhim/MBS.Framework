@@ -63,6 +63,35 @@ namespace MBS.Framework
 		/// </value>
 		public static Application Instance { get; set; } = null;
 
+		public string[] FindFiles(string filename, FindFileOptions options = FindFileOptions.All)
+		{
+			if (filename.StartsWith("~/"))
+			{
+				filename = filename.Substring(2);
+			}
+
+			List<string> files = new List<string>();
+			string[] paths = EnumerateDataPaths();
+			foreach (string path in paths)
+			{
+				string file = System.IO.Path.Combine(new string[] { path, filename });
+				if (System.IO.File.Exists(file))
+				{
+					files.Add(file);
+				}
+			}
+			return files.ToArray();
+		}
+		public string FindFile(string fileName, FindFileOptions options = FindFileOptions.All)
+		{
+			string[] files = FindFiles(fileName, options);
+			if (files.Length > 0)
+			{
+				return files[0];
+			}
+			return null;
+		}
+
 		public EventFilter.EventFilterCollection EventFilters { get; } = new EventFilter.EventFilterCollection();
 
 		protected virtual Command FindCommandInternal(string commandID)
@@ -189,12 +218,7 @@ namespace MBS.Framework
 		}
 		public InstallationStatus InstallationStatus { get { return GetInstallationStatusInternal(); } }
 
-		public CommandLine CommandLine { get; protected set; } = null;
-
-		public Application()
-		{
-			CommandLine = new DefaultCommandLine();
-		}
+		public CommandLine CommandLine { get; } = new CommandLine();
 
 		private Dictionary<string, List<EventHandler>> _CommandEventHandlers = new Dictionary<string, List<EventHandler>>();
 		public Command.CommandCollection Commands { get; } = new Command.CommandCollection();

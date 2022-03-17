@@ -23,13 +23,13 @@ using System.Collections.Generic;
 
 namespace MBS.Framework
 {
-	public abstract class CommandLine
+	public class CommandLine
 	{
 		/// <summary>
 		/// Gets the original <see cref="String" /> array of arguments.
 		/// </summary>
 		/// <value>The arguments.</value>
-		public string[] Arguments { get; protected set; }
+		public string[] Arguments { get; internal set; }
 
 		/// <summary>
 		/// Gets the list of file names passed on the command line.
@@ -37,14 +37,13 @@ namespace MBS.Framework
 		/// <value>The file names.</value>
 		public List<string> FileNames { get; } = new List<string>();
 
+		public CommandLineParser Parser { get; set; } = null;
+
 		public CommandLineOption.CommandLineOptionCollection Options { get; } = new CommandLineOption.CommandLineOptionCollection();
 
-		protected CommandLine()
+		public CommandLine()
 		{
-		}
-		protected internal CommandLine(string[] arguments)
-		{
-			this.Arguments = arguments;
+			Options.Add(new CommandLineOption() { Name = "activation-type", Description = "The type of activation for this app", Type = CommandLineOptionValueType.Single });
 		}
 
 		public override string ToString()

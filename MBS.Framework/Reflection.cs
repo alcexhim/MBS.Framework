@@ -24,7 +24,7 @@ using System.Reflection;
 
 namespace MBS.Framework
 {
-	public class Reflection
+	public static class Reflection
 	{
 		public class ManifestResourceStream
 		{
@@ -271,6 +271,45 @@ namespace MBS.Framework
 				return (T)(t.Assembly.CreateInstance(t.FullName));
 
 			return default(T);
+		}
+
+		public static void InvokeMethod(object obj, string meth, params object[] parms)
+		{
+			if (obj == null)
+			{
+				Console.WriteLine("Engine::InvokeMethod: obj is null");
+				return;
+			}
+
+			Type t = obj.GetType();
+			System.Reflection.MethodInfo mi = t.GetMethod(meth, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+			if (mi != null)
+			{
+				mi.Invoke(obj, parms);
+			}
+			else
+			{
+				Console.WriteLine("Engine::InvokeMethod: method not found '" + meth + "' on '" + t.FullName + "'");
+			}
+		}
+		public static void InvokeMethod(Type type, string meth, params object[] parms)
+		{
+			if (type == null)
+			{
+				Console.WriteLine("Engine::InvokeMethod: obj is null");
+				return;
+			}
+
+			Type t = type;
+			System.Reflection.MethodInfo mi = t.GetMethod(meth, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static);
+			if (mi != null)
+			{
+				mi.Invoke(null, parms);
+			}
+			else
+			{
+				Console.WriteLine("Engine::InvokeMethod: static method not found '" + meth + "' on '" + t.FullName + "'");
+			}
 		}
 	}
 }
