@@ -20,6 +20,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
 using System.Collections;
+using System.Text;
 
 namespace MBS.Framework.Collections
 {
@@ -56,6 +57,17 @@ namespace MBS.Framework.Collections
 			{
 				dest.Add(o);
 			}
+		}
+
+		public static string ToString(this IEnumerable source, string separator)
+		{
+			StringBuilder sb = new StringBuilder();
+			foreach (object o in source)
+			{
+				sb.Append(o);
+				sb.Append(separator);
+			}
+			return sb.ToString();
 		}
 	}
 }
