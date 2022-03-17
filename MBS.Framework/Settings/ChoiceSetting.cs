@@ -58,6 +58,7 @@ namespace MBS.Framework.Settings
 			public string Name { get; set; } = String.Empty;
 			public string Title { get; set; } = String.Empty;
 			public object Value { get; set; } = null;
+			public Guid ID { get; set; } = Guid.Empty;
 
 			public ChoiceSettingValue(object value)
 			{
