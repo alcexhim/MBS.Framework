@@ -203,7 +203,13 @@ namespace MBS.Framework.Drawing
 
 		public int ToInt32()
 		{
-			return BitConverter.ToInt32(new byte[] { (byte)mvarA, (byte)mvarB, (byte)mvarG, (byte)mvarR }, 0);
+			int index = BitConverter.ToInt32(new byte[] { GetAlphaByte(), GetBlueByte(), GetGreenByte(), GetRedByte() }, 0);
+			return index;
+		}
+		public uint ToUInt32()
+		{
+			uint index = BitConverter.ToUInt32(new byte[] { GetAlphaByte(), GetBlueByte(), GetGreenByte(), GetRedByte() }, 0);
+			return index;
 		}
 
 		public override string ToString()
