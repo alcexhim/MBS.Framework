@@ -68,6 +68,11 @@ namespace MBS.Framework.Drawing
 		public double Right { get { return X + Width; } set { Width = value - X; } }
 		public double Bottom { get { return Y + Height; } set { Height = value - Y; } }
 
+		public Rectangle Translate(double x, int y)
+		{
+			return new Rectangle(X + x, Y + y, Width, Height);
+		}
+
 		public Rectangle Deflate(Padding padding)
 		{
 			Rectangle rect = this;
