@@ -129,6 +129,7 @@
     <Compile Include="NativeHandle.cs" />
     <Compile Include="CommandLineParser.cs" />
     <Compile Include="FindFileOptions.cs" />
+    <Compile Include="ExtensionMethods.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
