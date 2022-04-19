@@ -23,7 +23,7 @@ using System.Collections.Generic;
 
 namespace MBS.Framework
 {
-	public abstract class Setting
+	public abstract class Setting : ICloneable
 	{
 		public Setting(string name, string title, object defaultValue = null, bool enabled = true, bool visible = true)
 		{
@@ -168,10 +168,13 @@ namespace MBS.Framework
 				return defaultValue;
 			}
 		}
+
 		public void SetValue<T>(T value)
 		{
 			mvarValue = value;
 			_valueSet = true;
 		}
+
+		public abstract object Clone();
 	}
 }

@@ -29,8 +29,22 @@ namespace MBS.Framework.Settings
 
 		public RangeSetting(string name, string title, decimal defaultValue = 0.0M, decimal? minimumValue = null, decimal? maximumValue = null) : base(name, title, defaultValue)
 		{
+			DefaultValue = defaultValue;
 			MinimumValue = minimumValue;
 			MaximumValue = maximumValue;
+		}
+
+		public override object Clone()
+		{
+			RangeSetting clone = new RangeSetting(Name, Title, (decimal)DefaultValue, MinimumValue, MaximumValue);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			clone.SetValue(GetValue());
+			return clone;
 		}
 	}
 }

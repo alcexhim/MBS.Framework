@@ -69,5 +69,26 @@ namespace MBS.Framework.Settings
 			}
 			return null;
 		}
+
+		public override object Clone()
+		{
+			GroupSetting clone = new GroupSetting(Name, Title);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			foreach (Setting setting in HeaderSettings)
+			{
+				clone.HeaderSettings.Add(setting.Clone() as Setting);
+			}
+			foreach (Setting setting in Options)
+			{
+				clone.Options.Add(setting.Clone() as Setting);
+			}
+			clone.SetValue(GetValue());
+			return clone;
+		}
 	}
 }

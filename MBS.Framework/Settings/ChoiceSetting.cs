@@ -82,5 +82,20 @@ namespace MBS.Framework.Settings
 
 		public bool RequireSelectionFromList { get; set; } = true;
 		public bool MultipleSelect { get; set; } = false;
+
+		public override object Clone()
+		{
+			ChoiceSetting clone = new ChoiceSetting(Name, Title, DefaultValue);
+			clone.SelectedValue = SelectedValue;
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.RequireSelectionFromList = RequireSelectionFromList;
+			clone.MultipleSelect = MultipleSelect;
+			clone.Suffix = Suffix;
+			clone.Description = Description;
+
+			clone.SetValue(GetValue());
+			return clone;
+		}
 	}
 }

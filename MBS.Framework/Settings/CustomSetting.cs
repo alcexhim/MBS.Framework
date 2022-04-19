@@ -33,5 +33,18 @@ namespace MBS.Framework.Settings
 		{
 			base.SetValue(value);
 		}
+
+		public override object Clone()
+		{
+			CustomSetting clone = new CustomSetting(Name, Title, ControlTypeName);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			clone.SetValue(GetValue());
+			return clone;
+		}
 	}
 }

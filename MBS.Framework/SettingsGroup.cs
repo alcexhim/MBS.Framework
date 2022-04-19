@@ -24,7 +24,7 @@ using MBS.Framework.Settings;
 
 namespace MBS.Framework
 {
-	public class SettingsGroup : IComparable<SettingsGroup>
+	public class SettingsGroup : IComparable<SettingsGroup>, ICloneable
 	{
 		public class SettingsGroupCollection
 			: System.Collections.ObjectModel.Collection<SettingsGroup>
@@ -165,6 +165,19 @@ namespace MBS.Framework
 		public override string ToString ()
 		{
 			return String.Join (":", Path);
+		}
+
+		public object Clone()
+		{
+			SettingsGroup clone = new SettingsGroup();
+			clone.ID = ID;
+			clone.Path = Path?.Clone() as string[];
+			clone.Priority = Priority;
+			foreach (Setting setting in Settings)
+			{
+				clone.Settings.Add(setting.Clone() as Setting);
+			}
+			return clone;
 		}
 	}
 }

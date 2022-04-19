@@ -30,5 +30,17 @@ namespace MBS.Framework.Settings
 		{
 			CommandID = commandID;
 		}
+
+		public override object Clone()
+		{
+			CommandSetting clone = new CommandSetting(Name, Title, CommandID) { StylePreset = StylePreset };
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			return clone;
+		}
 	}
 }

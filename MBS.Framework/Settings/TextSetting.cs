@@ -29,5 +29,18 @@ namespace MBS.Framework.Settings
 		{
 			MaximumLength = maxLength;
 		}
+
+		public override object Clone()
+		{
+			TextSetting clone = new TextSetting(Name, Title, (string)DefaultValue, MaximumLength);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			clone.SetValue(GetValue());
+			return clone;
+		}
 	}
 }

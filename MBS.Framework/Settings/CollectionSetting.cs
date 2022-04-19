@@ -28,13 +28,32 @@ namespace MBS.Framework.Settings
 
 		public string SingularItemTitle { get; set; } = null;
 
-		public CollectionSetting(string name, string title, SettingsGroup group, string singularItemTitle = null) : base(name, title, null)
+		public CollectionSetting(string name, string title, SettingsGroup group = null, string singularItemTitle = null) : base(name, title, null)
 		{
-			for (int i = 0; i < group.Settings.Count; i++)
+			if (group != null)
 			{
-				Settings.Add(group.Settings[i]);
+				for (int i = 0; i < group.Settings.Count; i++)
+				{
+					Settings.Add(group.Settings[i]);
+				}
 			}
 			SingularItemTitle = singularItemTitle;
+		}
+
+		public override object Clone()
+		{
+			CollectionSetting clone = new CollectionSetting(Name, Title);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			foreach (Setting setting in Settings)
+			{
+				clone.Settings.Add(setting.Clone() as Setting);
+			}
+			return clone;
 		}
 	}
 }

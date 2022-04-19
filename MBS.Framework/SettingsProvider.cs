@@ -111,5 +111,13 @@ namespace MBS.Framework
 				return count;
 			}
 		}
+
+		public void CopyTo(SettingsProvider other)
+		{
+			foreach (SettingsGroup group in SettingsGroups)
+			{
+				other.SettingsGroups.Add(group.Clone() as SettingsGroup);
+			}
+		}
 	}
 }

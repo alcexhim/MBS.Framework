@@ -51,5 +51,18 @@ namespace MBS.Framework.Settings
 			RequireExistingFile = requireExistingFile;
 			FileNameFilter = fileNameFilter;
 		}
+
+		public override object Clone()
+		{
+			FileSetting clone = new FileSetting(Name, Title, (string)DefaultValue, RequireExistingFile, FileNameFilter);
+			clone.Required = Required;
+			clone.Prefix = Prefix;
+			clone.Description = Description;
+			clone.Enabled = Enabled;
+			clone.Visible = Visible;
+			clone.Suffix = Suffix;
+			clone.SetValue(GetValue());
+			return clone;
+		}
 	}
 }
