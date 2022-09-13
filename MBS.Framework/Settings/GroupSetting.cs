@@ -69,6 +69,23 @@ namespace MBS.Framework.Settings
 			}
 			return null;
 		}
+		public Setting FindSetting(Guid id)
+		{
+			foreach (Setting s in Options)
+			{
+				if (s is GroupSetting)
+				{
+					Setting r = (s as GroupSetting).FindSetting(id);
+					if (r != null) return r;
+				}
+				else
+				{
+					if (s.ID == id)
+						return s;
+				}
+			}
+			return null;
+		}
 
 		public override object Clone()
 		{

@@ -74,6 +74,26 @@ namespace MBS.Framework
 			}
 			return null;
 		}
+		public Setting FindSetting(Guid id)
+		{
+			foreach (SettingsGroup sg in SettingsGroups)
+			{
+				foreach (Setting s in sg.Settings)
+				{
+					if (s is GroupSetting)
+					{
+						Setting r = (s as GroupSetting).FindSetting(id);
+						if (r != null) return r;
+					}
+					else
+					{
+						if (s.ID == id)
+							return s;
+					}
+				}
+			}
+			return null;
+		}
 
 		protected virtual void InitializeInternal()
 		{
@@ -118,6 +138,21 @@ namespace MBS.Framework
 			{
 				other.SettingsGroups.Add(group.Clone() as SettingsGroup);
 			}
+		}
+
+		public SettingsProvider Clone(string settingsGroupsPrefix)
+		{
+			CustomSettingsProvider prov = new CustomSettingsProvider();
+			foreach (SettingsGroup sg in this.SettingsGroups)
+			{
+				SettingsGroup sg2 = sg.Clone() as SettingsGroup;
+				string[] szpath = new string[sg.Path.Length + 1];
+				Array.Copy(sg.Path, 0, szpath, 1, sg.Path.Length);
+				szpath[0] = settingsGroupsPrefix;
+				sg2.Path = szpath;
+				prov.SettingsGroups.Add(sg2);
+			}
+			return prov;
 		}
 	}
 }
