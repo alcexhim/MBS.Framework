@@ -131,6 +131,9 @@
     <Compile Include="FindFileOptions.cs" />
     <Compile Include="ExtensionMethods.cs" />
     <Compile Include="NanoId.cs" />
+    <Compile Include="ObjectExtensions.cs" />
+    <Compile Include="ConsoleExtensions.cs" />
+    <Compile Include="MessageSeverity.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
