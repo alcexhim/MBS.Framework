@@ -493,16 +493,18 @@ namespace MBS.Framework
 			Stopping = true;
 
 			System.ComponentModel.CancelEventArgs ce = new System.ComponentModel.CancelEventArgs();
-			OnStopping(ce);
-			if (ce.Cancel)
-				return;
-
-			ce = new System.ComponentModel.CancelEventArgs();
 			OnBeforeShutdown(ce);
 			if (ce.Cancel)
 			{
 				return;
 			}
+
+			ce = new System.ComponentModel.CancelEventArgs();
+
+			// OnStopping called after setting Stopping to True, otherwise there is no real difference
+			OnStopping(ce);
+			if (ce.Cancel)
+				return;
 
 			StopInternal(exitCode);
 
