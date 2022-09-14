@@ -419,6 +419,18 @@ namespace MBS.Framework
 			System.Diagnostics.Debug.WriteLine(sb);
 		}
 
+		private Language mvarDefaultLanguage = null;
+		/// <summary>
+		/// The default <see cref="Language"/> used to display translatable text in this application.
+		/// </summary>
+		public Language DefaultLanguage { get { return mvarDefaultLanguage; } set { mvarDefaultLanguage = value; } }
+
+		private Language.LanguageCollection mvarLanguages = new Language.LanguageCollection();
+		/// <summary>
+		/// The languages defined for this application. Translations can be added through XML files in the ~/Languages folder.
+		/// </summary>
+		public Language.LanguageCollection Languages { get { return mvarLanguages; } }
+
 		/// <summary>
 		/// Gets a value indicating whether this <see cref="Application" /> is
 		/// currently in the process of shutting down.
