@@ -77,6 +77,8 @@ namespace MBS.Framework.Drawing
 
 		static Measurement()
 		{
+			RegisterMeasurementUnit(MeasurementUnit.Unspecified, String.Empty);
+
 			RegisterMeasurementUnit(MeasurementUnit.Cm, "cm");
 			RegisterMeasurementUnit(MeasurementUnit.Em, "em");
 			RegisterMeasurementUnit(MeasurementUnit.Ex, "ex");

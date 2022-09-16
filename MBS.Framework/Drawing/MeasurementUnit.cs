@@ -26,6 +26,8 @@ namespace MBS.Framework.Drawing
 	/// </summary>
 	public enum MeasurementUnit
 	{
+		Unspecified = 0,
+
 		/// <summary>Measurement is in pixels.</summary>
 		Pixel = 1,
 		/// <summary>Measurement is in points. A point represents 1/72 of an inch.</summary>
