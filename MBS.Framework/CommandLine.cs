@@ -40,10 +40,20 @@ namespace MBS.Framework
 		public CommandLineParser Parser { get; set; } = null;
 
 		public CommandLineOption.CommandLineOptionCollection Options { get; } = new CommandLineOption.CommandLineOptionCollection();
+		public CommandLineCommand.CommandLineCommandCollection Commands { get; } = new CommandLineCommand.CommandLineCommandCollection();
+		public CommandLineCommand Command { get; internal set; } = null;
+		public string ShortOptionPrefix { get; set; } = null;
+		public string LongOptionPrefix { get; set; } = null;
 
 		public CommandLine()
 		{
-			Options.Add(new CommandLineOption() { Name = "activation-type", Description = "The type of activation for this app", Type = CommandLineOptionValueType.Single });
+			string[] args = Environment.GetCommandLineArgs();
+			string[] args2 = new string[args.Length - 1];
+			Array.Copy(args, 1, args2, 0, args2.Length);
+			Arguments = args2;
+
+			Options.Add(new CommandLineOption() { Abbreviation = 'A', Name = "activation-type", Description = "The type of activation for this app", Type = CommandLineOptionValueType.Single, Optional = true });
+			Options.Add(new CommandLineOption() { Name = "help", Description = "Displays help", Type = CommandLineOptionValueType.None, Optional = true });
 		}
 
 		public override string ToString()

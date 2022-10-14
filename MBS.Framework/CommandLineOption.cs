@@ -118,6 +118,12 @@ namespace MBS.Framework
 		public object DefaultValue { get; set; } = null;
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="T:MBS.Framework.CommandLineOption"/> is optional.
+		/// </summary>
+		/// <value><c>true</c> if optional; otherwise, <c>false</c>.</value>
+		public bool Optional { get; set; } = false;
+
+		/// <summary>
 		/// The description displayed in the help text.
 		/// </summary>
 		/// <value>The description.</value>

@@ -135,6 +135,9 @@
     <Compile Include="ConsoleExtensions.cs" />
     <Compile Include="MessageSeverity.cs" />
     <Compile Include="Language.cs" />
+    <Compile Include="ApplicationActivatedEvent.cs" />
+    <Compile Include="ApplicationActivationType.cs" />
+    <Compile Include="CommandLineCommand.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
@@ -145,6 +148,9 @@
     <Folder Include="Scripting\Strings\" />
     <Folder Include="Settings\" />
     <Folder Include="UserInterface\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="MemorySettingsProvider.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

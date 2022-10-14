@@ -19,10 +19,23 @@
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 using System;
+using System.Collections.Generic;
+
 namespace MBS.Framework
 {
 	public static class ArrayExtensions
 	{
+		/// <summary>
+		/// Splits the <paramref name="array" /> into two arrays at the specified
+		/// <paramref name="index" />, where <paramref name="left" /> contains the
+		/// elements before <paramref name="index" /> and <paramref name="right" />
+		/// contains the elements after <paramref name="index" />.
+		/// </summary>
+		/// <param name="array">The array to split.</param>
+		/// <param name="index">The index at which to split the array.</param>
+		/// <param name="left">The array containing elements before the split point.</param>
+		/// <param name="right">The array containing elements after the split point.</param>
+		/// <typeparam name="T">The <see cref="Type" /> of elements in the array.</typeparam>
 		public static void Bisect<T>(this T[] array, int index, out T[] left, out T[] right)
 		{
 			left = new T[index];
@@ -55,12 +68,25 @@ namespace MBS.Framework
 			Array.Copy(sourceArray, 0, destinationArray, start, sourceArray.Length);
 		}
 
-		public static bool Matches<T>(this T[] array1, T[] array2)
+		/// <summary>
+		/// Determines if <paramref name="array1" /> and <paramref name="array2" />
+		/// contain the same elements.
+		/// </summary>
+		/// <returns>
+		/// <see langword="true" /> if both arrays contain the same elements,
+		/// <see langword="false" /> otherwise.</returns>
+		/// <param name="array1">The first array to search.</param>
+		/// <param name="array2">The second array to search.</param>
+		/// <typeparam name="T">The 1st type parameter.</typeparam>
+		public static bool Matches<T>(this IList<T> array1, IList<T> array2)
 		{
-			if (array1.Length != array2.Length)
+			if (array1.Count != array2.Count)
+			{
+				// short-circuit if arrays have different lengths
 				return false;
+			}
 
-			for (int i = 0; i < array1.Length; i++)
+			for (int i = 0; i < array1.Count; i++)
 			{
 				if (!array1[i].Equals(array2[i]))
 					return false;

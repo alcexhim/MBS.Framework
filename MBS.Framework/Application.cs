@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using MBS.Framework.Collections.Generic;
 
 namespace MBS.Framework
 {
@@ -63,6 +64,13 @@ namespace MBS.Framework
 		/// </value>
 		public static Application Instance { get; set; } = null;
 
+		/// <summary>
+		/// Searches for the file with the given <paramref name="filename" /> and
+		/// returns all matching fully-qualified file names.
+		/// </summary>
+		/// <returns>The files.</returns>
+		/// <param name="filename">Filename.</param>
+		/// <param name="options">Options.</param>
 		public string[] FindFiles(string filename, FindFileOptions options = FindFileOptions.All)
 		{
 			if (filename.StartsWith("~/"))
@@ -82,9 +90,16 @@ namespace MBS.Framework
 			}
 			return files.ToArray();
 		}
-		public string FindFile(string fileName, FindFileOptions options = FindFileOptions.All)
+		/// <summary>
+		/// Searches for the file with the given <paramref name="filename" /> and
+		/// returns the first matching fully-qualified file name.
+		/// </summary>
+		/// <returns>The files.</returns>
+		/// <param name="filename">Filename.</param>
+		/// <param name="options">Options.</param>
+		public string FindFile(string filename, FindFileOptions options = FindFileOptions.All)
 		{
-			string[] files = FindFiles(fileName, options);
+			string[] files = FindFiles(filename, options);
 			if (files.Length > 0)
 			{
 				return files[0];
@@ -92,8 +107,16 @@ namespace MBS.Framework
 			return null;
 		}
 
+		/// <summary>
+		/// Gets a collection of <see cref="EventFilter" />s registered for this
+		/// <see cref="Application" />.
+		/// </summary>
+		/// <value>The event filters.</value>
 		public EventFilter.EventFilterCollection EventFilters { get; } = new EventFilter.EventFilterCollection();
 
+		/// <summary>
+		/// Finds the command with the given <paramref name="commandID" />.
+		/// </summary>
 		protected virtual Command FindCommandInternal(string commandID)
 		{
 			return null;
@@ -125,10 +148,18 @@ namespace MBS.Framework
 			return null;
 		}
 
+		/// <summary>
+		/// Finds the <see cref="Context" /> with the given
+		/// <paramref name="contextID" />.
+		/// </summary>
 		protected virtual Context FindContextInternal(Guid contextID)
 		{
 			return null;
 		}
+		/// <summary>
+		/// Finds the <see cref="Context" /> with the given
+		/// <paramref name="contextID" />.
+		/// </summary>
 		public Context FindContext(Guid contextID)
 		{
 			Context ctx = FindContextInternal(contextID);
@@ -303,10 +334,221 @@ namespace MBS.Framework
 			Initialized = true;
 		}
 
+		public event ApplicationActivatedEventHandler Activated;
+		protected virtual void OnActivated(ApplicationActivatedEventArgs e)
+		{
+			Activated?.Invoke(this, e);
+		}
+
 		protected virtual int StartInternal()
 		{
+			CommandLine cline = new CommandLine();
+			string[] args = CommandLine.Arguments;
+
+			if (args.Length > 0)
+			{
+				int i = 0;
+				for (i = 0; i < args.Length; i++)
+				{
+					if (ParseOption(args, ref i, cline.Options, CommandLine.Options))
+						break;
+				}
+
+				// we have finished parsing the first set of options ("global" options)
+				// now we see if we have commands
+				if (CommandLine.Commands.Count > 0 && i < args.Length)
+				{
+					// we support commands like git and apt, "appname --app-global-options <command> --command-options"
+					CommandLineCommand cmd = CommandLine.Commands[args[i]];
+					if (cmd != null)
+					{
+						for (i++; i < args.Length; i++)
+						{
+							if (ParseOption(args, ref i, null, cmd.Options))
+								break;
+						}
+
+						cline.Command = cmd;
+					}
+					else
+					{
+						// assume filename
+					}
+				}
+
+				for (/* intentionally left blank */; i < args.Length; i++)
+				{
+					cline.FileNames.Add(args[i]);
+				}
+			}
+
+			OnActivated(new ApplicationActivatedEventArgs(true, ApplicationActivationType.CommandLineLaunch, cline));
 			return 0;
 		}
+
+
+		protected void PrintUsageStatement(CommandLineCommand command = null)
+		{
+			Console.Write("usage: {0} ", ShortName);
+			foreach (CommandLineOption option in CommandLine.Options)
+			{
+				PrintUsageStatementOption(option);
+			}
+			Console.WriteLine();
+			// Console.Write("[<global-options...>]");
+
+			if (command != null)
+			{
+				Console.WriteLine("  {0}{1}", command.Name, command.Description == null ? null : String.Format(" - {0}", command.Description));
+				foreach (CommandLineOption option in command.Options)
+				{
+					PrintUsageStatementOption(option);
+				}
+			}
+			else
+			{
+				if (CommandLine.Commands.Count > 0)
+				{
+					Console.WriteLine(" <command> [<command-options...>]");
+					Console.WriteLine();
+
+					List<CommandLineCommand> commands = new List<CommandLineCommand>(CommandLine.Commands);
+					commands.Sort((x, y) =>
+					{
+						return x.Name.CompareTo(y.Name);
+					});
+					foreach (CommandLineCommand command1 in commands)
+					{
+						Console.WriteLine("  {0}{1}", command1.Name, command1.Description == null ? null : String.Format(" - {0}", command1.Description));
+					}
+				}
+			}
+		}
+
+		private void PrintUsageStatementOption(CommandLineOption option)
+		{
+			Console.Write("  ");
+			if (option.Optional)
+			{
+				Console.Write('[');
+			}
+
+			string shortOptionPrefix = CommandLine.ShortOptionPrefix ?? "-";
+			string longOptionPrefix = CommandLine.LongOptionPrefix ?? "--";
+
+			if (option.Abbreviation != '\0')
+			{
+				Console.Write("{0}{1}", shortOptionPrefix, option.Abbreviation);
+				if (option.Type == CommandLineOptionValueType.Single)
+				{
+					Console.Write(" <value>");
+				}
+				else if (option.Type == CommandLineOptionValueType.Multiple)
+				{
+					Console.Write(" <value1>[,<value2>,...]");
+				}
+
+				Console.Write(" | {0}{1}", longOptionPrefix, option.Name);
+				if (option.Type == CommandLineOptionValueType.Single)
+				{
+					Console.Write("=<value>");
+				}
+				else if (option.Type == CommandLineOptionValueType.Multiple)
+				{
+					Console.Write("=<value1>[,<value2>,...]");
+				}
+			}
+			else
+			{
+				Console.Write(longOptionPrefix ?? "--");
+				Console.Write("{0}", option.Name);
+				if (option.Type == CommandLineOptionValueType.Single)
+				{
+					Console.Write("=<value>");
+				}
+				else if (option.Type == CommandLineOptionValueType.Multiple)
+				{
+					Console.Write("=<value1>[,<value2>,...]");
+				}
+			}
+			if (option.Optional)
+			{
+				Console.Write(']');
+			}
+			// Console.WriteLine();
+		}
+
+		/// <summary>
+		/// Parses the option.
+		/// </summary>
+		/// <returns><c>true</c>, if option was parsed, <c>false</c> otherwise.</returns>
+		/// <param name="args">Arguments.</param>
+		/// <param name="index">Index.</param>
+		/// <param name="list">The list into which to add the option if it has been specified.</param>
+		/// <param name="optionSet">The set of available options.</param>
+		private bool ParseOption(string[] args, ref int index, IList<CommandLineOption> list, CommandLineOption.CommandLineOptionCollection optionSet)
+		{
+			string longOptionPrefix = "--", shortOptionPrefix = "-";
+
+			bool breakout = false;
+			if (args[index].StartsWith(shortOptionPrefix) && args[index].Length == (shortOptionPrefix.Length + 1))
+			{
+				char shortOptionChar = args[index][args[index].Length - 1];
+				CommandLineOption option = optionSet[shortOptionChar];
+				if (option != null)
+				{
+					if (option.Abbreviation == shortOptionChar)
+					{
+						if (option.Type != CommandLineOptionValueType.None)
+						{
+							index++;
+							option.Value = args[index];
+						}
+
+						if (list != null)
+							list.Add(option);
+					}
+				}
+				else
+				{
+					list.Add(new CommandLineOption() { Abbreviation = shortOptionChar });
+				}
+			}
+			else if (args[index].StartsWith(longOptionPrefix))
+			{
+				// long option format is --name[=value]
+				string name = args[index].Substring(longOptionPrefix.Length);
+				string value = null;
+				if (name.Contains("="))
+				{
+					int idx = name.IndexOf('=');
+					value = name.Substring(idx + 1);
+					name = name.Substring(0, idx);
+				}
+				CommandLineOption option = optionSet[name];
+				if (option != null)
+				{
+					if (option.Type != CommandLineOptionValueType.None)
+					{
+						// index++;
+						// option.Value = args[index];
+						option.Value = value;
+					}
+					list.Add(option);
+				}
+				else
+				{
+					list.Add(new CommandLineOption() { Name = name });
+				}
+			}
+			else
+			{
+				// we have reached a non-option
+				return true;
+			}
+			return false;
+		}
+
 		public int Start()
 		{
 			if (Application.Instance == null)
