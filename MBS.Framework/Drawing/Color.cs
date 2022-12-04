@@ -362,6 +362,57 @@ namespace MBS.Framework.Drawing
 			}
 		}
 
+		public static Color FromHSV(double h, double s, double v)
+		{
+			double c = v * s;
+			double x = c * (1 - Math.Abs((h / (60 / 360)) % 2 - 1));
+			double m = v - c;
+
+			double r = 0, g = 0, b = 0;
+			if (h >= 0 && h < (60 / 360))
+			{
+				r = c;
+				g = x;
+				b = 0;
+			}
+			else if (h >= (60 / 360) && h < (120 / 360))
+			{
+				r = x;
+				g = c;
+				b = 0;
+			}
+			else if (h >= (120 / 360) && h < (180 / 360))
+			{
+				r = 0;
+				g = c;
+				b = x;
+			}
+			else if (h >= (180 / 360) && h < (240 / 360))
+			{
+				r = 0;
+				g = x;
+				b = c;
+			}
+			else if (h >= (240 / 360) && h < (300 / 360))
+			{
+				r = x;
+				g = 0;
+				b = c;
+			}
+			else if (h >= (300 / 360) && h < (360 / 360))
+			{
+				r = c;
+				g = 0;
+				b = x;
+			}
+			else
+			{
+
+			}
+
+			return Color.FromRGBAInt32((int)(255 * r), (int)(255 * g), (int)(255 * b));
+		}
+
 		public static Color FromHSL(double h, double s, double l)
 		{
 			double r = 0, g = 0, b = 0;
