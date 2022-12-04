@@ -47,13 +47,16 @@ namespace MBS.Framework
 
 		public CommandLineOption.CommandLineOptionCollection Options { get; } = new CommandLineOption.CommandLineOptionCollection();
 
-		public CommandLineCommand(string command, CommandLineOption[] options = null)
+		public Action<ApplicationActivatedEventArgs> ActivationDelegate { get; } = null;
+
+		public CommandLineCommand(string command, CommandLineOption[] options = null, Action<ApplicationActivatedEventArgs> activationDelegate = null)
 		{
 			Name = command;
 			if (options != null)
 			{
 				Options.AddRange(options);
 			}
+			ActivationDelegate = activationDelegate;
 		}
 	}
 }
