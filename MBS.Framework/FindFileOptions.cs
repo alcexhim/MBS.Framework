@@ -24,17 +24,23 @@ namespace MBS.Framework
 	/// <summary>
 	/// Controls the behavior of relative file resolution.
 	/// </summary>
+	[Flags()]
 	public enum FindFileOptions
 	{
 		/// <summary>
 		/// Returns all matching fully-qualified file paths across all global,
 		/// application, and user directories.
 		/// </summary>
-		All = 0,
+		All = 1,
 		/// <summary>
 		/// Returns only file paths that are writable by the user (i.e., in the
 		/// user's local or roaming data directory).
 		/// </summary>
-		UserWritable = 1
+		UserWritable = 2,
+		/// <summary>
+		/// Allows the user to create a file if it does not exist (i.e., returns
+		/// a file name even if it does not exist)
+		/// </summary>
+		Create = 4
 	}
 }

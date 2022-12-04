@@ -79,7 +79,7 @@ namespace MBS.Framework
 			}
 
 			List<string> files = new List<string>();
-			string[] paths = EnumerateDataPaths();
+			string[] paths = EnumerateDataPaths(options);
 			foreach (string path in paths)
 			{
 				string file = System.IO.Path.Combine(new string[] { path, filename });
@@ -103,6 +103,11 @@ namespace MBS.Framework
 			if (files.Length > 0)
 			{
 				return files[0];
+			}
+			if ((options & FindFileOptions.Create) == FindFileOptions.Create)
+			{
+				string[] paths = EnumerateDataPaths(options);
+				return System.IO.Path.Combine(paths[0], filename);
 			}
 			return null;
 		}
@@ -212,31 +217,56 @@ namespace MBS.Framework
 			}
 		}
 
-		public string[] EnumerateDataPaths()
+		protected virtual string DataDirectoryName => ShortName;
+		public string[] EnumerateDataPaths() => EnumerateDataPaths(FindFileOptions.All);
+		public string[] EnumerateDataPaths(FindFileOptions options)
 		{
-			return new string[]
+			List<string> list = new List<string>();
+
+			if ((options & FindFileOptions.All) == FindFileOptions.All)
 			{
 				// first look in the application root directory since this will override everything else
-				BasePath,
+				list.Add(BasePath);
+
+				if (Environment.OSVersion.Platform == PlatformID.Unix)
+				{
+					// if we are on Unix or Mac OS X, look in /etc/...
+					list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+					{
+						String.Empty, // *nix root directory
+						"etc",
+						DataDirectoryName
+					}));
+				}
+
 				// then look in /usr/share/universal-editor or C:\ProgramData\Mike Becker's Software\Universal Editor
-				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
 				{
 					System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData),
-					ShortName
-				}),
+					DataDirectoryName
+				}));
+
 				// then look in ~/.local/share/universal-editor or C:\Users\USERNAME\AppData\Local\Mike Becker's Software\Universal Editor
-				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
 				{
 					System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
-					ShortName
-				}),
-				// then look in ~/.universal-editor or C:\Users\USERNAME\AppData\Roaming\Mike Becker's Software\Universal Editor
-				String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
-				{
-					System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
-					ShortName
-				})
-			};
+					DataDirectoryName
+				}));
+			}
+
+
+
+			 //fixme: addd finddfileoption.userconfig, localdata, etc.
+			// now for the user-writable locations...
+
+			// then look in ~/.universal-editor or C:\Users\USERNAME\AppData\Roaming\Mike Becker's Software\Universal Editor
+			list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+			{
+				System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
+				DataDirectoryName
+			}));
+
+			return list.ToArray();
 		}
 
 		public string ShortName { get; set; }
@@ -364,7 +394,7 @@ namespace MBS.Framework
 					{
 						for (i++; i < args.Length; i++)
 						{
-							if (ParseOption(args, ref i, null, cmd.Options))
+							if (ParseOption(args, ref i, cline.Options, cmd.Options))
 								break;
 						}
 
@@ -382,8 +412,17 @@ namespace MBS.Framework
 				}
 			}
 
-			OnActivated(new ApplicationActivatedEventArgs(true, ApplicationActivationType.CommandLineLaunch, cline));
-			return 0;
+			ApplicationActivatedEventArgs e = new ApplicationActivatedEventArgs(true, ApplicationActivationType.CommandLineLaunch, cline);
+			if (cline.Command != null && cline.Command.ActivationDelegate != null)
+			{
+				// use the activation delegate instead of calling OnActivated
+				cline.Command.ActivationDelegate(e);
+			}
+			else
+			{
+				OnActivated(e);
+			}
+			return e.ExitCode;
 		}
 
 
