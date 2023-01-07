@@ -66,5 +66,16 @@ namespace MBS.Framework
 			}
 			return VerticalAlignment.Default;
 		}
+
+		public static string UrlSafeBase64ToBase64(string base64)
+		{
+			// RFC 4648 "Url-Safe Base64"
+			return base64.Replace('_', '/').Replace('-', '+');
+		}
+		public static string Base64ToUrlSafeBase64(string base64)
+		{
+			// RFC 4648 "Url-Safe Base64"
+			return base64.Replace('+', '-').Replace('/', '_');
+		}
 	}
 }
