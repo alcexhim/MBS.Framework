@@ -93,5 +93,13 @@ namespace MBS.Framework
 			}
 			return true;
 		}
+
+		public static T[] Concat<T>(T[] array1, T[] array2)
+		{
+			T[] array3 = new T[array1.Length + array2.Length];
+			Array.Copy(array1, 0, array3, 0, array1.Length);
+			Array.Copy(array2, 0, array3, array1.Length, array2.Length);
+			return array3;
+		}
 	}
 }

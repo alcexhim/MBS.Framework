@@ -26,6 +26,33 @@ namespace MBS.Framework.Collections
 {
 	public static class ExtensionMethods
 	{
+		public static bool ContainsAny<T>(this IEnumerable enumerable, T[] item)
+		{
+			foreach (object item1 in enumerable)
+			{
+				foreach (T item2 in item)
+				{
+					if (item1 is T)
+					{
+						if (item1.Equals(item2))
+							return true;
+					}
+				}
+			}
+			return false;
+		}
+		public static bool ContainsAny<T>(this System.Collections.Generic.IEnumerable<T> enumerable, T[] item)
+		{
+			foreach (T item1 in enumerable)
+			{
+				foreach (T item2 in item)
+				{
+					if (item1.Equals(item2))
+						return true;
+				}
+			}
+			return false;
+		}
 		public static T[] ToArray<T>(this IEnumerable enumerable) where T : class
 		{
 			System.Collections.Generic.List<T> list = new System.Collections.Generic.List<T>();

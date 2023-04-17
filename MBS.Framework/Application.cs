@@ -364,10 +364,23 @@ namespace MBS.Framework
 			Initialized = true;
 		}
 
+		public event ApplicationActivatedEventHandler BeforeActivated;
+		protected virtual void OnBeforeActivated(ApplicationActivatedEventArgs e)
+		{
+			BeforeActivated?.Invoke(this, e);
+		}
+
 		public event ApplicationActivatedEventHandler Activated;
 		protected virtual void OnActivated(ApplicationActivatedEventArgs e)
 		{
 			Activated?.Invoke(this, e);
+		}
+
+
+		public event ApplicationActivatedEventHandler AfterActivated;
+		protected virtual void OnAfterActivated(ApplicationActivatedEventArgs e)
+		{
+			AfterActivated?.Invoke(this, e);
 		}
 
 		protected virtual int StartInternal()
@@ -413,14 +426,61 @@ namespace MBS.Framework
 			}
 
 			ApplicationActivatedEventArgs e = new ApplicationActivatedEventArgs(true, ApplicationActivationType.CommandLineLaunch, cline);
+
+			if (CommandLine.Options["help"]?.Value is bool && ((bool)CommandLine.Options["help"]?.Value) == true)
+			{
+				if (ShowCommandLineHelp(out int resultCode))
+				{
+					return resultCode;
+				}
+			}
+
 			if (cline.Command != null && cline.Command.ActivationDelegate != null)
 			{
+				OnBeforeActivated(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
+
 				// use the activation delegate instead of calling OnActivated
 				cline.Command.ActivationDelegate(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
+
+				OnAfterActivated(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
 			}
 			else
 			{
+				OnBeforeActivated(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
+
 				OnActivated(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
+
+				OnAfterActivated(e);
+				if (!e.Success)
+				{
+					Console.WriteLine(String.Format("Try '{0} --help' for more information.", ShortName));
+					return e.ExitCode;
+				}
 			}
 			return e.ExitCode;
 		}
@@ -428,12 +488,32 @@ namespace MBS.Framework
 
 		protected void PrintUsageStatement(CommandLineCommand command = null)
 		{
+			string shortOptionPrefix = CommandLine.ShortOptionPrefix ?? "-";
+			string longOptionPrefix = CommandLine.LongOptionPrefix ?? "--";
+
 			Console.Write("usage: {0} ", ShortName);
 			foreach (CommandLineOption option in CommandLine.Options)
 			{
 				PrintUsageStatementOption(option);
 			}
+
+			if (CommandLine.HelpTextPrefix != null)
+			{
+				Console.WriteLine();
+				Console.WriteLine();
+				Console.WriteLine(CommandLine.HelpTextPrefix);
+			}
+
 			Console.WriteLine();
+
+			bool printDescriptions = true;
+			if (printDescriptions)
+			{
+				foreach (CommandLineOption option in CommandLine.Options)
+				{
+					Console.WriteLine("  {0}{1}", option.Abbreviation != '\0' ? String.Format("{0}{1}, {2}{3}", shortOptionPrefix, option.Abbreviation, longOptionPrefix, option.Name) : String.Format("{0}{1}", longOptionPrefix, option.Name), option.Description == null ? null : String.Format(" - {0}", option.Description));
+				}
+			}
 			// Console.Write("[<global-options...>]");
 
 			if (command != null)
@@ -461,6 +541,12 @@ namespace MBS.Framework
 						Console.WriteLine("  {0}{1}", command1.Name, command1.Description == null ? null : String.Format(" - {0}", command1.Description));
 					}
 				}
+			}
+
+			if (CommandLine.HelpTextSuffix != null)
+			{
+				Console.WriteLine();
+				Console.WriteLine(CommandLine.HelpTextSuffix);
 			}
 		}
 
@@ -543,6 +629,10 @@ namespace MBS.Framework
 							index++;
 							option.Value = args[index];
 						}
+						else
+						{
+							option.Value = true;
+						}
 
 						if (list != null)
 							list.Add(option);
@@ -572,6 +662,10 @@ namespace MBS.Framework
 						// index++;
 						// option.Value = args[index];
 						option.Value = value;
+					}
+					else
+					{
+						option.Value = true;
 					}
 					list.Add(option);
 				}
@@ -831,6 +925,14 @@ namespace MBS.Framework
 		public void SetSetting<T>(Guid id, T value)
 		{
 			_settings[id] = value;
+		}
+
+		protected virtual bool ShowCommandLineHelp(out int resultCode)
+		{
+			// bash: cd returns 2 if --help is specified OR invalid option selected, 1 if file not found
+			PrintUsageStatement();
+			resultCode = 2;
+			return true;
 		}
 	}
 }

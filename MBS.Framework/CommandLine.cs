@@ -39,6 +39,9 @@ namespace MBS.Framework
 
 		public CommandLineParser Parser { get; set; } = null;
 
+		public string HelpTextPrefix { get; set; } = null;
+		public string HelpTextSuffix { get; set; } = null;
+
 		public CommandLineOption.CommandLineOptionCollection Options { get; } = new CommandLineOption.CommandLineOptionCollection();
 		public CommandLineCommand.CommandLineCommandCollection Commands { get; } = new CommandLineCommand.CommandLineCommandCollection();
 		public CommandLineCommand Command { get; internal set; } = null;

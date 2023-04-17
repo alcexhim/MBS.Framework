@@ -25,6 +25,8 @@ namespace MBS.Framework
 {
 	public class ApplicationActivatedEventArgs : EventArgs
 	{
+		public bool Success { get; set; } = true;
+
 		public bool FirstRun { get; } = true;
 		public CommandLine CommandLine { get; } = null;
 		public int ExitCode { get; set; } = 0;

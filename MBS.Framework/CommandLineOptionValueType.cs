@@ -23,8 +23,17 @@ namespace MBS.Framework
 {
 	public enum CommandLineOptionValueType
 	{
+		/// <summary>
+		/// The option accepts no values.
+		/// </summary>
 		None = 0,
+		/// <summary>
+		/// The option accepts a single value.
+		/// </summary>
 		Single = 1,
+		/// <summary>
+		/// The option accepts multiple values.
+		/// </summary>
 		Multiple = 2
 	}
 }

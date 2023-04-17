@@ -161,7 +161,9 @@ namespace MBS.Framework
 		}
 
 
-		private const string DefaultAlphabet = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		public const string DefaultAlphabet = "_-0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+		public const string DefaultAlphabetNoSpecialChars = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
 		private static readonly CryptoRandom Random = new CryptoRandom();
 		/// <summary>
 		///

@@ -97,6 +97,7 @@ namespace MBS.Framework
 		}
 
 
+		private static object available_assemblies_lock = new object();
 		private static Assembly[] mvarAvailableAssemblies = null;
 		/// <summary>
 		/// Gets the available assemblies in the given search paths, or the current application directory if no search paths are specified.
@@ -105,7 +106,7 @@ namespace MBS.Framework
 		/// <param name="searchPaths">An array of <see cref="string" /> paths to search in.</param>
 		public static Assembly[] GetAvailableAssemblies(string[] searchPaths = null)
 		{
-			if (mvarAvailableAssemblies == null)
+			if (mvarAvailableAssemblies == null || searchPaths != null)
 			{
 				List<Assembly> list = new List<Assembly>();
 
@@ -139,27 +140,40 @@ namespace MBS.Framework
 							Assembly asm = Assembly.LoadFile(FileName);
 							list.Add(asm);
 						}
-						catch
+						catch (Exception ex)
 						{
 						}
 					}
 				}
 
-				mvarAvailableAssemblies = list.ToArray();
+				if (searchPaths == null)
+				{
+					mvarAvailableAssemblies = list.ToArray();
+				}
+				else
+				{
+					return list.ToArray();
+				}
 			}
 			return mvarAvailableAssemblies;
 		}
 
 		private static Type[] mvarAvailableTypes = null;
-		public static Type[] GetAvailableTypes(Type[] inheritsFrom = null)
+		public static Type[] GetAvailableTypes(Type[] inheritsFrom = null, Assembly[] additionalAssemblies = null)
 		{
 			if (mvarAvailableTypes == null)
 			{
 				List<Type> types = new List<Type>();
 				Assembly[] asms = GetAvailableAssemblies();
-				for (int iAsm = 0; iAsm < asms.Length; iAsm++)
+				List<Assembly> listAsms = new List<Assembly>(asms);
+				if (additionalAssemblies != null)
 				{
-					Assembly asm = asms[iAsm];
+					listAsms.AddRange(additionalAssemblies);
+				}
+
+				for (int iAsm = 0; iAsm < listAsms.Count; iAsm++)
+				{
+					Assembly asm = listAsms[iAsm];
 					Type[] types1 = null;
 					try
 					{

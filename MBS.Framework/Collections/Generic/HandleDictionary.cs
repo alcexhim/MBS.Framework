@@ -43,6 +43,15 @@ namespace MBS.Framework.Collections.Generic
 			_dict.Add(handle, obj);
 		}
 
+		public bool ContainsObject(TObject obj)
+		{
+			return _dict.ContainsValue2(obj);
+		}
+		public bool ContainsHandle(THandle handle)
+		{
+			return _dict.ContainsValue1(handle);
+		}
+
 		public bool Contains(TObject obj)
 		{
 			return _dict.ContainsValue2(obj);
