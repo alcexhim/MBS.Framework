@@ -83,6 +83,11 @@ namespace MBS.Framework.Drawing
 			return rect;
 		}
 
+		public Rectangle Clone()
+		{
+			return new Rectangle(X, Y, Width, Height);
+		}
+
 		/// <summary>
 		/// Creates a <see cref="Rectangle" /> from left, top, right, bottom coordinates.
 		/// </summary>
