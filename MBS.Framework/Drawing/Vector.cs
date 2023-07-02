@@ -34,6 +34,15 @@ namespace MBS.Framework.Drawing
 			return (this.X.Equals(other.X) && this.Y.Equals(other.Y));
 		}
 
+		public static Vector2D operator -(Vector2D left, Vector2D right)
+		{
+			return new Vector2D(right.X - left.X, right.Y - left.Y);
+		}
+		public static Vector2D operator +(Vector2D left, Vector2D right)
+		{
+			return new Vector2D(right.X + left.X, right.Y + left.Y);
+		}
+
 		public static bool operator ==(Vector2D left, Vector2D right)
 		{
 			return left.Equals(right);
@@ -50,6 +59,11 @@ namespace MBS.Framework.Drawing
 				return X.Equals(other.X) && Y.Equals(other.Y) && IsEmpty.Equals(other.IsEmpty);
 			}
 			return base.Equals(obj);
+		}
+
+		public Vector2D Offset(Vector2D value)
+		{
+			return new Vector2D(this.X + value.X, this.Y + value.Y);
 		}
 
 		#endregion
