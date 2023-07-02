@@ -661,6 +661,15 @@ namespace MBS.Framework
 					{
 						// index++;
 						// option.Value = args[index];
+						if (!name.Contains("="))
+						{
+							// already taken care of the true case above
+							if (index + 1 < args.Length)
+							{
+								index++;
+								value = args[index];
+							}
+						}
 						option.Value = value;
 					}
 					else
@@ -883,6 +892,7 @@ namespace MBS.Framework
 			OnBeforeShutdown(ce);
 			if (ce.Cancel)
 			{
+				Stopping = false;
 				return;
 			}
 
@@ -891,7 +901,10 @@ namespace MBS.Framework
 			// OnStopping called after setting Stopping to True, otherwise there is no real difference
 			OnStopping(ce);
 			if (ce.Cancel)
+			{
+				Stopping = false;
 				return;
+			}
 
 			StopInternal(exitCode);
 
@@ -934,5 +947,11 @@ namespace MBS.Framework
 			resultCode = 2;
 			return true;
 		}
+
+		protected virtual Plugin[] GetAdditionalPluginsInternal()
+		{
+			return new Plugin[0];
+		}
+		public Plugin[] GetAdditionalPlugins() { return GetAdditionalPluginsInternal(); }
 	}
 }
