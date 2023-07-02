@@ -138,6 +138,9 @@
     <Compile Include="ApplicationActivatedEvent.cs" />
     <Compile Include="ApplicationActivationType.cs" />
     <Compile Include="CommandLineCommand.cs" />
+    <Compile Include="ProgressEvent.cs" />
+    <Compile Include="ICustomPlugin.cs" />
+    <Compile Include="StringBuilderExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />
