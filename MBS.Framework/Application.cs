@@ -360,9 +360,21 @@ namespace MBS.Framework
 			if (ShortName == null)
 				throw new ArgumentException("must specify a ShortName for the application");
 
+			Console.CancelKeyPress += Console_CancelKeyPress;
+
 			InitializeInternal();
 			Initialized = true;
 		}
+
+		protected virtual void OnCancelKeyPress(ConsoleCancelEventArgs e)
+		{
+		}
+
+		private void Console_CancelKeyPress(object sender, ConsoleCancelEventArgs e)
+		{
+			OnCancelKeyPress(e);
+		}
+
 
 		public event ApplicationActivatedEventHandler BeforeActivated;
 		protected virtual void OnBeforeActivated(ApplicationActivatedEventArgs e)
