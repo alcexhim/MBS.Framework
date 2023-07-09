@@ -226,6 +226,10 @@ namespace MBS.Framework.Drawing
 			Hue = value;
 		}
 
+		public int GetHueScaledInt32(double scale = 240.0)
+		{
+			return (int)GetHueScaled(scale);
+		}
 		public double GetHueScaled(double scale = 240.0)
 		{
 			return GetHueFraction() * scale;
