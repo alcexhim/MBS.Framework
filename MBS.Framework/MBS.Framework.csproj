@@ -141,6 +141,7 @@
     <Compile Include="ProgressEvent.cs" />
     <Compile Include="ICustomPlugin.cs" />
     <Compile Include="StringBuilderExtensions.cs" />
+    <Compile Include="Diagnostics\Logger.cs" />
     <Compile Include="PropertyBag.cs" />
     <Compile Include="PropertyValueChangedEvent.cs" />
     <Compile Include="PropertyValueChangingEvent.cs" />
@@ -156,6 +157,7 @@
     <Folder Include="Scripting\Strings\" />
     <Folder Include="Settings\" />
     <Folder Include="UserInterface\" />
+    <Folder Include="Diagnostics\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="MemorySettingsProvider.cs" />
