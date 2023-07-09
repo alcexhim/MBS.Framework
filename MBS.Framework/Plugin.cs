@@ -25,8 +25,21 @@ namespace MBS.Framework
 {
 	public class Plugin
 	{
+		public Context Context { get; protected set; }
 		public virtual string Title { get; set; } = null;
 		public Feature.FeatureCollection ProvidedFeatures { get; } = new Feature.FeatureCollection();
+
+		/// <summary>
+		/// Gets a <see cref="PropertyBag" /> containing the plugin-specific
+		/// settings for this <see cref="Plugin" />.
+		/// </summary>
+		/// <value>The settings.</value>
+		public PropertyBag Settings { get; }
+
+		public Plugin()
+		{
+			Settings = new PluginPropertyBag(this);
+		}
 
 		public bool Initialized { get; private set; } = false;
 		public void Initialize()
@@ -35,6 +48,8 @@ namespace MBS.Framework
 				return;
 
 			InitializeInternal();
+
+			Settings.Initialize();
 			Initialized = true;
 		}
 

@@ -141,6 +141,11 @@
     <Compile Include="ProgressEvent.cs" />
     <Compile Include="ICustomPlugin.cs" />
     <Compile Include="StringBuilderExtensions.cs" />
+    <Compile Include="PropertyBag.cs" />
+    <Compile Include="PropertyValueChangedEvent.cs" />
+    <Compile Include="PropertyValueChangingEvent.cs" />
+    <Compile Include="PropertyValueRequestedEvent.cs" />
+    <Compile Include="PluginPropertyBag.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Logic\" />

@@ -223,53 +223,75 @@ namespace MBS.Framework
 		{
 			List<string> list = new List<string>();
 
+			string[] dataDirectoryNames = null;
+			if (AdditionalShortNames != null)
+			{
+				dataDirectoryNames = new string[AdditionalShortNames.Length + 1];
+				dataDirectoryNames[0] = DataDirectoryName;
+				for (int i = 0; i < AdditionalShortNames.Length; i++)
+				{
+					dataDirectoryNames[i + 1] = AdditionalShortNames[i];
+				}
+			}
+			else
+			{
+				dataDirectoryNames = new string[] { DataDirectoryName };
+			}
+
 			if ((options & FindFileOptions.All) == FindFileOptions.All)
 			{
 				// first look in the application root directory since this will override everything else
 				list.Add(BasePath);
 
-				if (Environment.OSVersion.Platform == PlatformID.Unix)
+				foreach (string dataDirName in dataDirectoryNames)
 				{
-					// if we are on Unix or Mac OS X, look in /etc/...
+					if (Environment.OSVersion.Platform == PlatformID.Unix)
+					{
+						// if we are on Unix or Mac OS X, look in /etc/...
+						list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+						{
+							String.Empty, // *nix root directory
+							"etc",
+							dataDirName
+						}));
+					}
+
+					// then look in /usr/share/universal-editor or C:\ProgramData\Mike Becker's Software\Universal Editor
 					list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
 					{
-						String.Empty, // *nix root directory
-						"etc",
-						DataDirectoryName
+						System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData),
+						dataDirName
+					}));
+
+					// then look in ~/.local/share/universal-editor or C:\Users\USERNAME\AppData\Local\Mike Becker's Software\Universal Editor
+					list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+					{
+						System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
+						dataDirName
 					}));
 				}
-
-				// then look in /usr/share/universal-editor or C:\ProgramData\Mike Becker's Software\Universal Editor
-				list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
-				{
-					System.Environment.GetFolderPath(System.Environment.SpecialFolder.CommonApplicationData),
-					DataDirectoryName
-				}));
-
-				// then look in ~/.local/share/universal-editor or C:\Users\USERNAME\AppData\Local\Mike Becker's Software\Universal Editor
-				list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
-				{
-					System.Environment.GetFolderPath(System.Environment.SpecialFolder.LocalApplicationData),
-					DataDirectoryName
-				}));
 			}
 
 
 
-			 //fixme: addd finddfileoption.userconfig, localdata, etc.
+			//fixme: addd finddfileoption.userconfig, localdata, etc.
 			// now for the user-writable locations...
 
-			// then look in ~/.universal-editor or C:\Users\USERNAME\AppData\Roaming\Mike Becker's Software\Universal Editor
-			list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+			foreach (string dataDirName in dataDirectoryNames)
 			{
-				System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
-				DataDirectoryName
-			}));
-
+				// then look in ~/.universal-editor or C:\Users\USERNAME\AppData\Roaming\Mike Becker's Software\Universal Editor
+				list.Add(String.Join(System.IO.Path.DirectorySeparatorChar.ToString(), new string[]
+				{
+					System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData),
+					dataDirName
+				}));
+			}
 			return list.ToArray();
 		}
 
 		public string ShortName { get; set; }
+		public virtual string[] AdditionalShortNames => null;
+
 		public string Title { get; set; } = String.Empty;
 		public int ExitCode { get; protected set; } = 0;
 
